@@ -1,5 +1,3 @@
-// import { METHODS } from "http"
-
 function clientFetch( method: string, path: string, cb: any ) {
     const token = localStorage.getItem('token')
     const headers = new Headers()
@@ -16,6 +14,8 @@ function clientFetch( method: string, path: string, cb: any ) {
     if( token ) {
         headers.append('Authorization', `Bearer ${token}`)
     }
+    headers.append('Accept', 'application/json')
+    headers.append('Content-Type', 'application/json' )
 
     return fetch(`localhost:5000${path}`, reqOptions)
         .then(checkStatus)
