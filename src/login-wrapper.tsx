@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import LoginForm from './components/login/login'
 class LoginWrapper extends Component {
 
     
@@ -7,9 +7,10 @@ class LoginWrapper extends Component {
     render() {
         const token = localStorage.getItem('token')
         return ( 
-            {!!token && (<div>Bookmarks</div> )
-             !token && (<div>home</div>)   
-            }
+            <div>
+            { token && (<div>Bookmarks</div> )}
+            { !token && (<LoginForm />)  }
+            </div>
         )
     }
 }
