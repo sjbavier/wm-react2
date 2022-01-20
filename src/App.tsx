@@ -1,29 +1,34 @@
-import React from 'react'
+import React, { FC } from 'react'
 import logo from './logo.svg'
 import { Routes, Route } from 'react-router-dom'
-import TopBar from './components/nav/TopBar'
+import Nav from './components/nav/Nav'
 import LoginForm from './components/login/LoginForm'
 import PrivateRoute from './components/login/PrivateRoute'
-import './App.css'
+import { Layout } from 'antd'
+
+import './global.scss'
+import styles from './index.module.scss'
 
 
-function App() {
+const App: FC = () => {
   return (
-    <div className='App'>
-      <TopBar></TopBar>
-      <div className='wrapper'>
-        <Routes>
-          <Route path="/" element={ <div>Home</div> } />
-          <Route path="/login" element={ <LoginForm /> } />
-          <Route path="/dashboard" element={ 
+    <div className={ styles.maxHeight }>
+      <Layout>
+        <Nav></Nav>
+        <div className='wrapper'>
+          <Routes>
+            <Route path="/" element={<div>Home</div>} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/dashboard" element={
               <PrivateRoute>
                 <div>Dashboard</div>
               </PrivateRoute>
-            } 
-          />
-          <Route path="*" element={ <div>404 nothing here</div> } />
-        </Routes>
-      </div>
+            }
+            />
+            <Route path="*" element={<div>404 nothing here</div>} />
+          </Routes>
+        </div>
+      </Layout>
     </div>
   );
 }
