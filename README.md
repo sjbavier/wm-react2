@@ -44,3 +44,20 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+## Too many open files issue:
+
+Set limits in /etc/sysctl.conf by adding:
+
+```conf
+fs.inotify.max_user_watches=524288
+fs.inotify.max_user_instances=512
+```
+
+Open a new terminal or reload sysctl.conf variables with
+
+```sh
+sudo sysctl --system
+yarn start
+```

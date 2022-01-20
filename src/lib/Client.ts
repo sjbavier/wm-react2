@@ -14,6 +14,7 @@ class Client {
 
     isLoggedIn(): boolean{
         return !!this.token
+        // TODO: build out token validation
     }
 
     logout(): void{

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import clientFetch from '../../lib/clientFetch'
 import { client } from '../../lib/Client'
 
 class LoginForm extends Component {
@@ -36,16 +35,7 @@ class LoginForm extends Component {
             password: this.state.password
         }
 
-        // const fetchOptions = {
-        //     method:'POST',
-        //     path:'/auth/login',
-        //     data: JSON.stringify(formdata),
-        //     cb: this.formUpdate
-        // }
-
-        // clientFetch( fetchOptions )
         client.login(formdata, this.formUpdate)
-
     }
 
     render(){
@@ -61,7 +51,7 @@ class LoginForm extends Component {
                     <input 
                         placeholder="password"
                         type="password"
-                        value={this.state.password}
+                        value={ this.state.password }
                         onChange={ this.onPasswordChange }
                     />
                     <input
