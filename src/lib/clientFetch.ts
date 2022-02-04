@@ -5,7 +5,7 @@ interface ClientFetchOptions {
     cb: any
 }
 
-function clientFetch( opts: ClientFetchOptions ) {
+async function clientFetch( opts: ClientFetchOptions ) {
     const token = localStorage.getItem('token')
     var headers = new Headers()
     headers.append('Accept', 'application/json')
@@ -30,12 +30,11 @@ function clientFetch( opts: ClientFetchOptions ) {
 
 
 function checkStatus(response: any) {
-    if (response.status >= 200 && response.status < 300) {
-      return response;
+    let status = response.status
+    if (status >= 200 && status < 300) {
+        return response
     } else {
-      let error = new Error(`HTTP Error ${response.statusText}`);
-      console.log(error); // eslint-disable-line no-console
-      throw error;
+        return response
     }
 }
 

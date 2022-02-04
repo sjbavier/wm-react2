@@ -1,68 +1,85 @@
-import React, { Component } from 'react'
+import React, { FC, useState } from 'react'
 import { client } from '../../lib/Client'
+import { Form, Input, Button } from 'antd'
 
-class LoginForm extends Component {
+import webmaneLogo from '../../img/LionHeadLOGO.svg'
 
-    state = {
-        email: '',
-        password: '',
-        formState: '',
-        token: ''
+import styles from './Login.module.scss'
+
+const LoginForm: FC = () => {
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [msg, setMsg] = useState('')
+
+    function onEmailChange(ev: any): void {
+        setEmail(ev.target.value)
     }
 
-    onEmailChange = ( ev: any ) => {
-        this.setState({ email: ev.target.value })
+    function onPasswordChange(ev: any): void {
+        setPassword(ev.target.value)
     }
 
-    onPasswordChange = ( ev: any ) => {
-        this.setState({ password: ev.target.value })
+    function formUpdate(data: any): void {
+        console.log(data)
+        setMsg(data.message)
+        localStorage.setItem('token', data?.access_token)
     }
 
-    formUpdate = ( data: any ) => {
-        this.setState({
-            formState: data.message, 
-            token: data.access_token
-        })
-        localStorage.setItem('token', data.access_token)
-    }   
-
-    formSubmit = ( ev: any ) => {
+    function formSubmit(ev: any): void {
         ev.preventDefault()
-        this.setState({formState: 'submitting'})
+        setMsg('Submitting')
 
-        var formdata = {
-            email: this.state.email,
-            password: this.state.password
+        let formdata = {
+            email: email,
+            password: password
         }
 
-        client.login(formdata, this.formUpdate)
+        client.login(formdata, formUpdate)
     }
 
-    render(){
-        return (
-            <div>
-                <form onSubmit={ this.formSubmit }>
-                    <input 
-                        placeholder="email"
-                        type="text" 
-                        value={this.state.email}
-                        onChange={ this.onEmailChange }
-                    />
-                    <input 
-                        placeholder="password"
-                        type="password"
-                        value={ this.state.password }
-                        onChange={ this.onPasswordChange }
-                    />
-                    <input
-                        type="submit"
-                    />
-                </form>
-                <p>{ this.state.formState }</p>
-                <p>{ this.state.token }</p>
+
+    return (
+        <div className={styles.flex}>
+            <div className={styles.login_form}>
+                <div className={styles.logo_wrapper} >
+                    <div className={styles.logo_item}>
+                        <img className={styles.logo} src={webmaneLogo} alt="webmane logo" />
+                    </div>
+                    <div className={styles.logo_item}>
+                        <h1>Webmane Login</h1>
+                    </div>
+                </div>
+                <Form
+                    labelCol={{ span: 6 }}
+                    wrapperCol={{ span: 30 }}
+                >
+                    <Form.Item label="email" rules={[{ required: true }]}>
+                        <Input
+                            placeholder="email"
+                            type="text"
+                            value={email}
+                            onChange={onEmailChange}
+                        />
+                    </Form.Item>
+                    <Form.Item label="password" rules={[{ required: true }]}>
+                        <Input
+                            placeholder="password"
+                            type="password"
+                            value={password}
+                            onChange={onPasswordChange}
+                        />
+                    </Form.Item>
+                    <Form.Item label="" wrapperCol={{ offset: 6 }}>
+                        <Button type="primary" onClick={formSubmit}>
+                            Login
+                        </Button>
+                    </Form.Item>
+                </Form>
+                <p>{msg}</p>
             </div>
-        )
-    }
+        </div>
+    )
 }
 
 export default LoginForm

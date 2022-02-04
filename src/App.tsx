@@ -1,9 +1,9 @@
 import React, { FC } from 'react'
-import logo from './logo.svg'
 import { Routes, Route } from 'react-router-dom'
 import Nav from './components/nav/Nav'
 import LoginForm from './components/login/LoginForm'
 import PrivateRoute from './components/login/PrivateRoute'
+import Bookmarks from './components/bookmarks/Bookmarks'
 import { Layout } from 'antd'
 
 import './global.scss'
@@ -15,13 +15,13 @@ const App: FC = () => {
     <div className={ styles.maxHeight }>
       <Layout>
         <Nav></Nav>
-        <div className='wrapper'>
+        <div className={ styles.wrapper }>
           <Routes>
             <Route path="/" element={<div>Home</div>} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/dashboard" element={
               <PrivateRoute>
-                <div>Dashboard</div>
+                <div>Dashboard <Bookmarks /></div>
               </PrivateRoute>
             }
             />
