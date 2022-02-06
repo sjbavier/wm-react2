@@ -1,37 +1,48 @@
-import clientFetch from "./clientFetch"
-
 class Client {
     token: string
 
-    constructor(){
+    constructor() {
         this.token = localStorage.getItem('token') || ""
     }
 
-    removeToken(): void{
+    removeToken(): void {
         this.token = ""
         localStorage.setItem('token', "")
     }
 
-    isLoggedIn(): boolean{
+    isLoggedIn(): boolean {
         return !!this.token
         // TODO: build out token validation
     }
 
-    logout(): void{
+    logout(): void {
         this.removeToken()
     }
 
-    async login(data: object, cb: object){
-        const fetchOptions = {
-            method : 'POST',
-            path: '/auth/login',
-            data: JSON.stringify(data),
-            cb: cb
-        }
+    async fetchMe<T>(method: string, path: string, data?: any): Promise<T> {
+        var headers = new Headers()
+        headers.append('Accept', 'application/json')
+        headers.append('Content-Type', 'application/json')
 
-        await clientFetch( fetchOptions )
+        if (this.token) {
+            headers.append('Authorization', `Bearer ${this.token}`)
+        }
+        const reqOptions = {
+            method: method,
+            headers: headers,
+            body: JSON.stringify(data) || undefined
+        }
+        let response = await fetch(`${path}`, reqOptions)
+        if (!response.ok) {
+            let errResponse = await response.json()
+            throw new Error(errResponse.message)
+        }
+        return response.json() as Promise<T>
     }
 
+    prettyError(err: string): string {
+       return err.toString().replace('Error:', '')
+    }
 }
 
 export const client = new Client()

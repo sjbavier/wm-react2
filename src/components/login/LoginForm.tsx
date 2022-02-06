@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import { client } from '../../lib/Client'
 import { useNavigate } from 'react-router-dom'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button, Alert } from 'antd'
 
 import webmaneLogo from '../../img/LionHeadLOGO.svg'
 
@@ -12,6 +12,7 @@ const LoginForm: FC = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [msg, setMsg] = useState('')
+    const [err, setErr] = useState('')
     const [fetching, setFetching] = useState(false)
     const navigate = useNavigate()
 
@@ -23,23 +24,31 @@ const LoginForm: FC = () => {
         setPassword(ev.target.value)
     }
 
-    function formUpdate(data: any): any {
-        setMsg(data.message)
-        localStorage.setItem('token', data?.access_token)        
-    }
-
     function formSubmit(ev: any): void {
         ev.preventDefault()
-        setMsg('Submitting')
+        setErr('')
+        setMsg('')
         let formdata = {
             email: email,
             password: password
         }
-        if(!fetching){
+        if (!fetching) {
             setFetching(true)
-            client.login(formdata, formUpdate)
-            setFetching(false)            
-            // navigate("/dashboard", { replace: true })
+            setMsg('Submitting')
+            client.fetchMe<{ message: string, access_token?: string }>
+                ('POST', '/auth/login', formdata)
+                .then((response) => {
+                    setErr('')
+                    setMsg(response.message)
+                    let access_token = response.access_token || ''
+                    localStorage.setItem('token', access_token)
+                    // navigate("/dashboard", {replace: true})
+                })
+                .catch((err) => {
+                    setMsg('')
+                    setErr(client.prettyError(err))
+                })
+                .finally(() => setFetching(false))
         }
     }
 
@@ -75,12 +84,13 @@ const LoginForm: FC = () => {
                         />
                     </Form.Item>
                     <Form.Item label="" wrapperCol={{ offset: 6 }}>
-                        <Button type="primary" onClick={formSubmit}>
+                        <Button type="primary" htmlType="submit" onClick={formSubmit} >
                             Login
                         </Button>
                     </Form.Item>
                 </Form>
-                <p>{msg}</p>
+                {msg && (<Alert message={msg} type="success" />)}
+                {err && (<Alert message={err} type="error" />)}
             </div>
         </div>
     )
