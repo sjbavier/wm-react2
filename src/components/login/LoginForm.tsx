@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react'
 import { client } from '../../lib/Client'
+import { useNavigate } from 'react-router-dom'
 import { Form, Input, Button } from 'antd'
 
 import webmaneLogo from '../../img/LionHeadLOGO.svg'
@@ -11,6 +12,8 @@ const LoginForm: FC = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [msg, setMsg] = useState('')
+    const [fetching, setFetching] = useState(false)
+    const navigate = useNavigate()
 
     function onEmailChange(ev: any): void {
         setEmail(ev.target.value)
@@ -20,24 +23,25 @@ const LoginForm: FC = () => {
         setPassword(ev.target.value)
     }
 
-    function formUpdate(data: any): void {
-        console.log(data)
+    function formUpdate(data: any): any {
         setMsg(data.message)
-        localStorage.setItem('token', data?.access_token)
+        localStorage.setItem('token', data?.access_token)        
     }
 
     function formSubmit(ev: any): void {
         ev.preventDefault()
         setMsg('Submitting')
-
         let formdata = {
             email: email,
             password: password
         }
-
-        client.login(formdata, formUpdate)
+        if(!fetching){
+            setFetching(true)
+            client.login(formdata, formUpdate)
+            setFetching(false)            
+            // navigate("/dashboard", { replace: true })
+        }
     }
-
 
     return (
         <div className={styles.flex}>

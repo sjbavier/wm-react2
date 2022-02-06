@@ -16,12 +16,17 @@ class Nav extends Component {
         this.forceUpdate()
     }
 
+    goHome = (ev: React.MouseEvent<HTMLDivElement>) => {
+        console.log('div clicked')
+        return <Navigate to="/" replace />
+    }
+
     render(): React.ReactNode {
         const { Sider } = Layout
         return (
             <header>
                 <Sider breakpoint='md' collapsedWidth="0" className={index.maxHeight}>
-                    <div className={ styles.logo_wrapper } onClick={ () => <Navigate to="/" /> }>
+                    <div className={ styles.logo_wrapper } onClick={ this.goHome } >
                         <img className={styles.logo} src={webmaneLogo} alt="Webmane logo" />
                     </div>
                     <h1 className={ styles.logo_text }>webmane</h1>

@@ -21,7 +21,7 @@ class Client {
         this.removeToken()
     }
 
-    login(data: object, cb: object){
+    async login(data: object, cb: object){
         const fetchOptions = {
             method : 'POST',
             path: '/auth/login',
@@ -29,7 +29,7 @@ class Client {
             cb: cb
         }
 
-        clientFetch( fetchOptions )
+        await clientFetch( fetchOptions )
     }
 
 }
