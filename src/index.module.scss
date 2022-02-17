@@ -1,7 +1,14 @@
 .maxHeight {
     min-height: 100vh;
+    height: 100%;
 }
 
 .wrapper {
     width: 100%;
+}
+
+.card_wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
 }

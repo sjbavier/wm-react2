@@ -40,7 +40,7 @@ class Client {
         return response.json() as Promise<T>
     }
 
-    prettyError(err: string): string {
+    prettyError(err: Error): string {
        return err.toString().replace('Error:', '')
     }
 }

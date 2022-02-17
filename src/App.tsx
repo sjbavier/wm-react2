@@ -12,16 +12,18 @@ import styles from './index.module.scss'
 
 const App: FC = () => {
   return (
-    <div className={ styles.maxHeight }>
+    <div className={styles.maxHeight}>
       <Layout>
         <Nav></Nav>
-        <div className={ styles.wrapper }>
+        <div className={styles.wrapper}>
           <Routes>
             <Route path="/" element={<div>Home</div>} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/dashboard" element={
               <PrivateRoute>
-                <div>Dashboard <Bookmarks /></div>
+                <div className={ styles.card_wrapper }>
+                  <Bookmarks />
+                </div>
               </PrivateRoute>
             }
             />
