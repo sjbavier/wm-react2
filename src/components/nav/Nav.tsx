@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { client } from '../../lib/Client'
 import { Layout, Menu } from 'antd'
-import { UserOutlined, ApartmentOutlined } from '@ant-design/icons'
+import { UserOutlined, ApartmentOutlined, UserAddOutlined } from '@ant-design/icons'
 
 import webmaneLogo from '../../img/LionHeadLOGO.svg'
 
@@ -43,9 +43,14 @@ class Nav extends Component {
                                     </Menu.Item>
                                 </>
                             ) : (
-                                <Menu.Item icon={<UserOutlined />} key="2">
-                                    <Link to='/login'>Login</Link>
-                                </Menu.Item>
+                                <>
+                                    <Menu.Item icon={<UserOutlined />} key="2">
+                                        <Link to='/login'>Login</Link>
+                                    </Menu.Item>
+                                    <Menu.Item icon={<UserAddOutlined />} key="3">
+                                        <Link to='/signup'>Signup</Link>
+                                    </Menu.Item>
+                                </>
                             )
                         }
                     </Menu>

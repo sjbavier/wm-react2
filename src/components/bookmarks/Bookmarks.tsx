@@ -34,7 +34,7 @@ const Bookmarks: FC = () => {
             title: 'Link',
             dataIndex: 'link',
             key: 'link',
-            render: ((link: string) => <a href={link} target="_blank">{link}</a>)
+            render: ((link: string) => <a href={link} target="_blank" rel="noreferrer">{link}</a>)
         },
         {
           title: 'Categories',
