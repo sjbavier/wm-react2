@@ -42,13 +42,18 @@ const LoginForm: FC = () => {
                     setMsg(response.message)
                     let access_token = response.access_token || ''
                     localStorage.setItem('token', access_token)
-                    // navigate("/dashboard", {replace: true})
+
                 })
                 .catch((err) => {
                     setMsg('')
                     setErr(client.prettyError(err))
                 })
-                .finally(() => setFetching(false))
+                .finally(() => {
+                    setFetching(false)
+                    if (client.isLoggedIn()) {
+                        navigate("/dashboard")
+                    }
+                })
         }
     }
 

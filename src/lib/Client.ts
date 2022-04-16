@@ -1,17 +1,16 @@
 class Client {
-    token: string
 
-    constructor() {
-        this.token = localStorage.getItem('token') || ""
+
+    getToken(): string {
+        return localStorage.getItem('token') || ""
     }
 
     removeToken(): void {
-        this.token = ""
         localStorage.setItem('token', "")
     }
 
     isLoggedIn(): boolean {
-        return !!this.token
+        return !!this.getToken()
         // TODO: build out token validation
     }
 
@@ -24,8 +23,8 @@ class Client {
         headers.append('Accept', 'application/json')
         headers.append('Content-Type', 'application/json')
 
-        if (this.token) {
-            headers.append('Authorization', `Bearer ${this.token}`)
+        if (this.getToken()) {
+            headers.append('Authorization', `Bearer ${this.getToken()}`)
         }
         const reqOptions = {
             method: method,
