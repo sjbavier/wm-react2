@@ -24,6 +24,7 @@ const Bookmarks: FC = () => {
   const [bookmarks, setBookmarks] = useState<IBookmarks[] | []>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [page, setPage] = useState<number>(1)
+  const [pageSize, setPageSize] = useState<number>(10)
   const [err, setErr] = useState<string | undefined>(undefined)
   const [totalBookmarks, setTotalBookmarks] = useState<number | undefined>(undefined)
 
@@ -65,7 +66,7 @@ const Bookmarks: FC = () => {
 
   const fetchPage = async (page: number) => {
     setIsLoading(true)
-    client.fetchMe<IResult>('GET', `/api/bookmarks/page/${page}`)
+    client.fetchMe<IResult>('GET', `/api/bookmarks/page/${page}/page_size/${pageSize}`)
       .then((data) => {
           setBookmarks(data.data)
           setTotalBookmarks(data.bookmarks_total)
@@ -94,7 +95,7 @@ const Bookmarks: FC = () => {
             columns={columns}
             dataSource={bookmarks}
             pagination={{
-              pageSize: 10,
+              pageSize: pageSize,
               total: totalBookmarks,
               onChange: (page) => {
                 fetchPage(page)
