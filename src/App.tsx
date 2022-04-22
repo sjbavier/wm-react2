@@ -13,7 +13,7 @@ import styles from './index.module.scss'
 
 const App: FC = () => {
   return (
-    <div className={styles.maxHeight}>
+    <div id="app_wrapper" className={styles.maxHeight}>
       <Layout>
         <Nav></Nav>
         <div className={styles.wrapper}>

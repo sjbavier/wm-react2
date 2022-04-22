@@ -63,7 +63,7 @@ const Bookmarks: FC = () => {
     },
   ]
 
-  const fetchPage = (page: number) => {
+  const fetchPage = async (page: number) => {
     setIsLoading(true)
     client.fetchMe<IResult>('GET', `/api/bookmarks/page/${page}`)
       .then((data) => {
@@ -77,7 +77,7 @@ const Bookmarks: FC = () => {
   useEffect(() => {
     let mounted = true
     if (mounted) {
-      fetchPage(page)
+      fetchPage(1)
     }
     return () => {
       mounted = false
