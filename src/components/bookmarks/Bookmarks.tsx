@@ -64,7 +64,7 @@ const Bookmarks: FC = () => {
     },
   ]
 
-  const fetchPage = async (page: number) => {
+  const fetchPage = async (page: number = 1, pageSize: number = 10) => {
     setIsLoading(true)
     client.fetchMe<IResult>('GET', `/api/bookmarks/page/${page}/page_size/${pageSize}`)
       .then((data) => {
@@ -78,7 +78,7 @@ const Bookmarks: FC = () => {
   useEffect(() => {
     let mounted = true
     if (mounted) {
-      fetchPage(1)
+      fetchPage()
     }
     return () => {
       mounted = false
@@ -97,8 +97,10 @@ const Bookmarks: FC = () => {
             pagination={{
               pageSize: pageSize,
               total: totalBookmarks,
-              onChange: (page) => {
-                fetchPage(page)
+              onChange: (page, pageSize) => {
+                setPage(page)
+                setPageSize(pageSize)
+                fetchPage(page, pageSize)
               }
             }}
           />
