@@ -28,3 +28,7 @@ const PERMISSION = {
     [ROLES.Editor]: [SCOPES.canRead, SCOPES.canWrite],
     [ROLES.Admin]: [SCOPES.canRead, SCOPES.canWrite, SCOPES.canExecute]
 }
+
+const PermissionWrapper = () => <></>
+
+export default PermissionWrapper 
