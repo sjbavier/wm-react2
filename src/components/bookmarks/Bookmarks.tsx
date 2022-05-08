@@ -1,6 +1,7 @@
-import React, { FC, useState, useEffect } from 'react'
-import { client } from '../../lib/Client'
+import { FC, useState, useEffect, useContext } from 'react'
+import { fetchMe, prettyError, TRequest } from '../../lib/Client'
 import { Table, Tag, Alert } from 'antd'
+import { AuthContext } from '../auth/AuthContext'
 
 import styles from './Bookmarks.module.scss'
 
@@ -21,12 +22,13 @@ const Bookmarks: FC = () => {
     name: string,
     category_id: number
   }
-  const [bookmarks, setBookmarks] = useState<IBookmarks[] | []>([])
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(10)
-  const [err, setErr] = useState<string | undefined>(undefined)
-  const [totalBookmarks, setTotalBookmarks] = useState<number | undefined>(undefined)
+  const [bookmarks, setBookmarks] = useState<IBookmarks[] | []>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [err, setErr] = useState<string | undefined>(undefined);
+  const [totalBookmarks, setTotalBookmarks] = useState<number | undefined>(undefined);
+  const { token } = useContext(AuthContext);
 
   const columns = [
     {
@@ -65,13 +67,18 @@ const Bookmarks: FC = () => {
   ]
 
   const fetchPage = async (page: number = 1, pageSize: number = 10) => {
+    const request: TRequest = {
+      method: 'GET',
+      path: `/api/bookmarks/page/${page}/page_size/${pageSize}`,
+      token: token
+    }
     setIsLoading(true)
-    client.fetchMe<IResult>('GET', `/api/bookmarks/page/${page}/page_size/${pageSize}`)
+    fetchMe<IResult>(request)
       .then((data) => {
           setBookmarks(data.data)
           setTotalBookmarks(data.bookmarks_total)
       })
-      .catch(err => setErr(client.prettyError(err)))
+      .catch(err => setErr(prettyError(err)))
       .finally(() => setIsLoading(false))
   }
 

@@ -11,6 +11,12 @@ interface IScopes {
     canExecute: string
 }
 
+interface IPermission {
+    USER: string[]
+    EDITOR: string[]
+    ADMIN: string[]
+}
+
 const ROLES = {
     User: 'USER',
     Editor: 'EDITOR',
@@ -23,7 +29,7 @@ const SCOPES = {
     canExecute: 'can-execute'
 }
 
-const PERMISSION = {
+export const PERMISSION = {
     [ROLES.User]: [SCOPES.canRead],  //https://262.ecma-international.org/6.0/#sec-object-initializer "ComputedProperyName"
     [ROLES.Editor]: [SCOPES.canRead, SCOPES.canWrite],
     [ROLES.Admin]: [SCOPES.canRead, SCOPES.canWrite, SCOPES.canExecute]

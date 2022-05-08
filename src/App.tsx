@@ -9,29 +9,32 @@ import { Layout } from 'antd'
 
 import './global.scss'
 import styles from './index.module.scss'
-
+import { AuthProvider } from './components/auth/AuthProvider'
 
 const App: FC = () => {
+
   return (
     <div id="app_wrapper" className={styles.maxHeight}>
       <Layout>
-        <Nav></Nav>
-        <div className={styles.wrapper}>
-          <Routes>
-            <Route path="/" element={<div>Home</div>} />
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/signup" element={<SignupForm />} />
-            <Route path="/dashboard" element={
-              <PrivateRoute>
-                <div className={ styles.card_wrapper }>
-                  <Bookmarks />
-                </div>
-              </PrivateRoute>
-            }
-            />
-            <Route path="*" element={<div>404 nothing here</div>} />
-          </Routes>
-        </div>
+        <AuthProvider>
+          <Nav></Nav>
+          <div className={styles.wrapper}>
+            <Routes>
+              <Route path="/" element={<div>Home</div>} />
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/signup" element={<SignupForm />} />
+              <Route path="/dashboard" element={
+                <PrivateRoute>
+                  <div className={styles.card_wrapper}>
+                    <Bookmarks />
+                  </div>
+                </PrivateRoute>
+              }
+              />
+              <Route path="*" element={<div>404 nothing here</div>} />
+            </Routes>
+          </div>
+        </AuthProvider>
       </Layout>
     </div>
   );

@@ -1,3 +1,5 @@
+import { useToken } from "../components/auth/useAuth"
+
 class Client {
 
 
@@ -18,30 +20,38 @@ class Client {
         this.removeToken()
     }
 
-    async fetchMe<T>(method: string, path: string, data?: any): Promise<T> {
-        var headers = new Headers()
-        headers.append('Accept', 'application/json')
-        headers.append('Content-Type', 'application/json')
-
-        if (this.getToken()) {
-            headers.append('Authorization', `Bearer ${this.getToken()}`)
-        }
-        const reqOptions = {
-            method: method,
-            headers: headers,
-            body: JSON.stringify(data) || undefined
-        }
-        let response = await fetch(`${path}`, reqOptions)
-        if (!response.ok) {
-            let errResponse = await response.json()
-            throw new Error(errResponse.message)
-        }
-        return response.json() as Promise<T>
-    }
-
-    prettyError(err: Error): string {
-       return err.toString().replace('Error:', '')
-    }
+    
 }
 
-export const client = new Client()
+export type TRequest = {
+    method: string
+    path: string
+    data?: any
+    token?: string
+}
+
+export const prettyError = (err: Error): string => {
+    return err.toString().replace('Error:', '')
+}
+
+export const fetchMe = async <T>(request: TRequest): Promise<T> => {
+
+    var headers = new Headers()
+    headers.append('Accept', 'application/json')
+    headers.append('Content-Type', 'application/json')
+
+    if (request.token) {
+        headers.append('Authorization', `Bearer ${request.token}`)
+    }
+    const reqOptions = {
+        method: request.method,
+        headers: headers,
+        body: JSON.stringify(request.data) || undefined
+    }
+    let response = await fetch(`${request.path}`, reqOptions)
+    if (!response.ok) {
+        let errResponse = await response.json()
+        throw new Error(errResponse.message)
+    }
+    return response.json() as Promise<T>
+}

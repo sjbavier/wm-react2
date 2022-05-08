@@ -1,9 +1,8 @@
-import React, { FC } from 'react'
+import { FC, useContext} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { client } from '../../lib/Client'
 import { Layout, Menu } from 'antd'
 import { UserOutlined, ApartmentOutlined, UserAddOutlined, HomeOutlined } from '@ant-design/icons'
-
+import { AuthContext } from '../auth/AuthContext'
 import webmaneLogo from '../../img/LionHeadLOGO.svg'
 
 import index from '../../index.module.scss'
@@ -14,10 +13,12 @@ const Nav: FC = () => {
 
     const { Sider } = Layout
     const navigate = useNavigate()
+    const { isLoggedIn, setIsLoggedIn, setToken } = useContext(AuthContext)
 
     function logout(ev: React.MouseEvent<HTMLDivElement>) {
-        client.logout()
-        navigate('')
+        setToken('');
+        setIsLoggedIn(false);
+        navigate('');
     }
 
     return (
@@ -32,7 +33,7 @@ const Nav: FC = () => {
                         <div onClick={() => navigate('')}>Home</div>
                     </Menu.Item>
                     {
-                        client.isLoggedIn() ? (
+                        isLoggedIn && (
                             <>
                                 <Menu.Item icon={<UserOutlined />} key="2">
                                     <div onClick={logout}>Logout</div>
@@ -41,7 +42,8 @@ const Nav: FC = () => {
                                     <Link to="/dashboard">Dashboard</Link>
                                 </Menu.Item>
                             </>
-                        ) : (
+                        ) } 
+                        { !isLoggedIn && (
                             <>
                                 <Menu.Item icon={<UserOutlined />} key="4">
                                     <Link to='/login'>Login</Link>

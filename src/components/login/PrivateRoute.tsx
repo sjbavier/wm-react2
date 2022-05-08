@@ -1,13 +1,13 @@
-import React from 'react'
+import { useContext } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { client } from '../../lib/Client'
-
+import { IAuth } from '../auth/useAuth'
+import { AuthContext } from '../auth/AuthContext'
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
+  const { err, isLoggedIn } = useContext<IAuth>(AuthContext);
   let location = useLocation()
-  const isLoggedIn: Boolean = client.isLoggedIn()
   if( !isLoggedIn ) {
-    return <Navigate to="/login" state={{ from: location }} />
+    return <Navigate to="/login" state={{ from: location, err }} />
   }
 
   return children

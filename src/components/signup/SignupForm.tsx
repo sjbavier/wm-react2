@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react'
-import { client } from '../../lib/Client'
+import { FC, useEffect, useState } from 'react'
+import { fetchMe, prettyError, TRequest } from '../../lib/Client'
 import { useNavigate } from 'react-router-dom'
 import { Form, Input, Button, Alert } from 'antd'
 
@@ -49,7 +49,7 @@ const SignupForm: FC = () => {
         ev.preventDefault()
         setErr('')
         setMsg('')
-        let formdata = {
+        let formData = {
             email: email,
             password: password,
             confirm_password: confirmPassword
@@ -57,8 +57,13 @@ const SignupForm: FC = () => {
         if (!fetching) {
             setFetching(true)
             setMsg('Submitting')
-            client.fetchMe<{ message: string, access_token?: string }>
-                ('POST', '/auth/register', formdata)
+            const request: TRequest ={
+                method: 'POST',
+                path: '/auth/register',
+                data: formData
+            }
+            fetchMe<{ message: string, access_token?: string }>
+                (request)
                 .then((response) => {
                     setErr('')
                     setMsg(response.message)
@@ -68,7 +73,7 @@ const SignupForm: FC = () => {
                 })
                 .catch((err) => {
                     setMsg('')
-                    setErr(client.prettyError(err))
+                    setErr(prettyError(err))
                 })
                 .finally(() => setFetching(false))
         }

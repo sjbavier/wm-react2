@@ -1,7 +1,9 @@
-import React, { FC, useState } from 'react'
-import { client } from '../../lib/Client'
+import { FC, useState, useContext } from 'react'
+import { fetchMe, TRequest, prettyError } from '../../lib/Client'
 import { useNavigate } from 'react-router-dom'
 import { Form, Input, Button, Alert } from 'antd'
+import { AuthContext } from '../auth/AuthContext'
+import { IAuth } from '../auth/useAuth'
 
 import webmaneLogo from '../../img/LionHeadLOGO.svg'
 
@@ -9,50 +11,55 @@ import styles from './Login.module.scss'
 
 const LoginForm: FC = () => {
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [msg, setMsg] = useState('')
-    const [err, setErr] = useState('')
-    const [fetching, setFetching] = useState(false)
-    const navigate = useNavigate()
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [msg, setMsg] = useState('');
+    const [err, setErr] = useState('');
+    const [fetching, setFetching] = useState(false);
+    const navigate = useNavigate();
+    const { setToken, setIsLoggedIn } = useContext<IAuth>(AuthContext);
 
     function onEmailChange(ev: any): void {
-        setEmail(ev.target.value)
+        setEmail(ev.target.value);
     }
 
     function onPasswordChange(ev: any): void {
-        setPassword(ev.target.value)
+        setPassword(ev.target.value);
     }
 
     function formSubmit(ev: any): void {
-        ev.preventDefault()
-        setErr('')
-        setMsg('')
-        let formdata = {
+        ev.preventDefault();
+        setErr('');
+        setMsg('');
+        let formData = {
             email: email,
             password: password
         }
+        const request: TRequest = {
+            method: 'POST',
+            path: '/auth/login',
+            data: formData
+        }
         if (!fetching) {
-            setFetching(true)
-            setMsg('Submitting')
-            client.fetchMe<{ message: string, access_token?: string }>
-                ('POST', '/auth/login', formdata)
+            setFetching(true);
+            setMsg('Submitting');
+            fetchMe<{ message: string, access_token?: string }>
+                (request)
                 .then((response) => {
-                    setErr('')
-                    setMsg(response.message)
-                    let access_token = response.access_token || ''
-                    localStorage.setItem('token', access_token)
+                    setErr('');
+                    setMsg(response.message);
+                    let access_token = response.access_token || '';
+                    setToken(access_token);
+                    setIsLoggedIn(true);
+                     navigate("/dashboard");
 
                 })
                 .catch((err) => {
-                    setMsg('')
-                    setErr(client.prettyError(err))
+                    setMsg('');
+                    setErr(prettyError(err));
                 })
                 .finally(() => {
-                    setFetching(false)
-                    if (client.isLoggedIn()) {
-                        navigate("/dashboard")
-                    }
+                    setFetching(false);
                 })
         }
     }
