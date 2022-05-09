@@ -9,6 +9,7 @@ type TAuthResponse = {
 
 export interface IAuth {
     err?: string
+    loading: boolean
     isLoggedIn: boolean
     setIsLoggedIn: any
     userId?: number
@@ -17,35 +18,36 @@ export interface IAuth {
     setToken: any
 }
 
-export const useToken = () => {
-    const [token, setToken] = useState<string>(() => {
-        return localStorage.getItem('token') || '';
-    });
-
-    useEffect(() => {
-        const setToken = (Atoken: string) => localStorage.setItem('token', Atoken);
-    }, [setToken]);
+export const useToken = (lToken: string) => {
+    const [token, _setToken] = useState<string>(lToken);
+    const setToken = (Atoken: string) => {
+        localStorage.setItem('token', Atoken);
+        _setToken(Atoken);
+    }
 
     return [token, setToken] as const // freeze array to a tuple
 }
 
 
 export const useAuth = () => {
-    const [token, setToken] = useToken();
+    const [token, setToken] = useToken(localStorage.getItem('token') || '');
     const [userId, setUserId] = useState<number | undefined>(undefined);
     const [scopes, setScopes] = useState<string[] | undefined>(undefined);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [err, setErr] = useState<string | any>('');
-    debugger;
+    const [loading, setLoading] = useState<boolean>(false);
+
     const hasFetched = useRef(false);
     useEffect(() => {
         let mounted = true;
+        setLoading(true);
         const request: TRequest = {
             method: 'GET',
             path: '/auth/authorize',
             token
         }
         if ( mounted && !hasFetched.current ) {
+            hasFetched.current = true;
             fetchMe<TAuthResponse>(request)
                 .then((response: TAuthResponse) => {
                     setUserId(response.userId);
@@ -56,15 +58,17 @@ export const useAuth = () => {
                     setIsLoggedIn(false);
                     setToken('');
                     setErr(err);
+                    console.log({err});
                 })
-                .finally(() => {
-                    mounted = false;
-                    hasFetched.current = true;
-                })
+                .finally(() => setLoading(false))
+
+            return () => {
+                mounted = false;
+            }
         }
     }, [token, scopes, isLoggedIn, err])
 
-    const auth: IAuth = { err, isLoggedIn, setIsLoggedIn, userId, scopes, token, setToken };
+    const auth: IAuth = { err, loading, isLoggedIn, setIsLoggedIn, userId, scopes, token, setToken };
 
     return auth;
 

@@ -51,7 +51,7 @@ const LoginForm: FC = () => {
                     let access_token = response.access_token || '';
                     setToken(access_token);
                     setIsLoggedIn(true);
-                     navigate("/dashboard");
+                     
 
                 })
                 .catch((err) => {
@@ -60,6 +60,7 @@ const LoginForm: FC = () => {
                 })
                 .finally(() => {
                     setFetching(false);
+                    navigate("/dashboard");
                 })
         }
     }

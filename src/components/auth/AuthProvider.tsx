@@ -3,11 +3,12 @@ import { useAuth, IAuth } from './useAuth'
 import { AuthContext } from './AuthContext';
 
 export const AuthProvider: FC = ({ children, ...props }): JSX.Element => {
-    const { err, isLoggedIn, setIsLoggedIn, userId, scopes, token, setToken } = useAuth()
+    const { err, loading, isLoggedIn, setIsLoggedIn, userId, scopes, token, setToken } = useAuth()
 
     return (
         <AuthContext.Provider value={{
             err,
+            loading,
             isLoggedIn,
             setIsLoggedIn,
             userId,
