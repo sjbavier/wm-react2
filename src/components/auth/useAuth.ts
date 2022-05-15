@@ -3,8 +3,10 @@ import { fetchMe, TRequest } from '../../lib/Client';
 import { PERMISSION } from '../../lib/Permissions'
 
 type TAuthResponse = {
-    role: string
     userId: number
+    user: string
+    role: string
+    message: string
 }
 
 export interface IAuth {
@@ -13,7 +15,11 @@ export interface IAuth {
     isLoggedIn: boolean
     setIsLoggedIn: any
     userId?: number
+    setUserId: any
+    user?: string
+    setUser: any
     scopes?: string[]
+    setScopes: any
     token?: string
     setToken: any
 }
@@ -32,6 +38,7 @@ export const useToken = (lToken: string) => {
 export const useAuth = () => {
     const [token, setToken] = useToken(localStorage.getItem('token') || '');
     const [userId, setUserId] = useState<number | undefined>(undefined);
+    const [user, setUser] = useState<string | undefined>(undefined)
     const [scopes, setScopes] = useState<string[] | undefined>(undefined);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [err, setErr] = useState<string | any>('');
@@ -46,12 +53,13 @@ export const useAuth = () => {
             path: '/auth/authorize',
             token
         }
-        if ( mounted && !hasFetched.current ) {
+        if ( mounted && !hasFetched.current && token ) {
             hasFetched.current = true;
             fetchMe<TAuthResponse>(request)
                 .then((response: TAuthResponse) => {
                     setUserId(response.userId);
-                    setScopes(PERMISSION[response.role]);
+                    setUser(response.user);
+                    setScopes(PERMISSION[response.role.toUpperCase()]);
                     setIsLoggedIn(true);
                 })
                 .catch((err: any) => {
@@ -68,7 +76,20 @@ export const useAuth = () => {
         }
     }, [token, scopes, isLoggedIn, err])
 
-    const auth: IAuth = { err, loading, isLoggedIn, setIsLoggedIn, userId, scopes, token, setToken };
+    const auth: IAuth = { 
+        err, 
+        loading, 
+        isLoggedIn, 
+        setIsLoggedIn, 
+        userId,
+        setUserId,
+        user,
+        setUser, 
+        scopes, 
+        setScopes, 
+        token, 
+        setToken 
+    };
 
     return auth;
 

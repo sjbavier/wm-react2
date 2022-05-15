@@ -13,7 +13,7 @@ import { AuthContext } from './components/auth/AuthContext';
 import { IAuth } from './components/auth/useAuth';
 
 const App: FC = () => {
-  const { err, loading } = useContext<IAuth>(AuthContext);
+  const { err, loading, user = '' } = useContext<IAuth>(AuthContext);
   return (
     <div id="app_wrapper" className={styles.maxHeight}>
       <Layout>
@@ -24,7 +24,7 @@ const App: FC = () => {
               <Route path="/login" element={<LoginForm />} />
               <Route path="/signup" element={<SignupForm />} />
               <Route path="/dashboard" element={
-                <PrivateRoute>
+                <PrivateRoute user={user}>
                   <div className={styles.card_wrapper}>
                     <Bookmarks />
                   </div>

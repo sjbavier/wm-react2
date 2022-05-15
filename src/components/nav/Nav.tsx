@@ -13,7 +13,7 @@ const Nav: FC = () => {
 
     const { Sider } = Layout
     const navigate = useNavigate()
-    const { isLoggedIn, setIsLoggedIn, setToken } = useContext(AuthContext)
+    const { isLoggedIn, setIsLoggedIn, setToken, scopes } = useContext(AuthContext)
 
     function logout(ev: React.MouseEvent<HTMLDivElement>) {
         setToken('');
