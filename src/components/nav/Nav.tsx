@@ -1,19 +1,20 @@
-import { FC, useContext} from 'react'
+import { FC, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Layout, Menu } from 'antd'
+import { Avatar, Layout, Menu } from 'antd'
 import { UserOutlined, ApartmentOutlined, UserAddOutlined, HomeOutlined } from '@ant-design/icons'
 import { AuthContext } from '../auth/AuthContext'
 import webmaneLogo from '../../img/LionHeadLOGO.svg'
 
 import index from '../../index.module.scss'
 import styles from "./Nav.module.scss"
+import Text from 'antd/lib/typography/Text'
 
 
 const Nav: FC = () => {
 
     const { Sider } = Layout
     const navigate = useNavigate()
-    const { isLoggedIn, setIsLoggedIn, setToken, scopes } = useContext(AuthContext)
+    const { isLoggedIn, setIsLoggedIn, setToken, scopes, user } = useContext(AuthContext)
 
     function logout(ev: React.MouseEvent<HTMLDivElement>) {
         setToken('');
@@ -42,19 +43,26 @@ const Nav: FC = () => {
                                     <Link to="/dashboard">Dashboard</Link>
                                 </Menu.Item>
                             </>
-                        ) } 
-                        { !isLoggedIn && (
-                            <>
-                                <Menu.Item icon={<UserOutlined />} key="4">
-                                    <Link to='/login'>Login</Link>
-                                </Menu.Item>
-                                <Menu.Item icon={<UserAddOutlined />} key="5">
-                                    <Link to='/signup'>Signup</Link>
-                                </Menu.Item>
-                            </>
-                        )
+                        )}
+                    {!isLoggedIn && (
+                        <>
+                            <Menu.Item icon={<UserOutlined />} key="4">
+                                <Link to='/login'>Login</Link>
+                            </Menu.Item>
+                            <Menu.Item icon={<UserAddOutlined />} key="5">
+                                <Link to='/signup'>Signup</Link>
+                            </Menu.Item>
+                        </>
+                    )
                     }
                 </Menu>
+                {isLoggedIn && user && (
+                    <div style={{ 'position': 'fixed', 'bottom': 10 }}>
+                        <Avatar icon={<UserOutlined />} style={{ 'margin': '10px 10px 10px 20px' }} />
+                        <Text ellipsis={true} style={{ 'width': 100, 'verticalAlign': 'middle', 'color': 'rgba(255,255,255,0.65)'}}>{user}</Text>
+                    </div>
+
+                )}
             </Sider>
         </header>
     )

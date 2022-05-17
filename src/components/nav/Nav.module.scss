@@ -34,3 +34,23 @@
     text-align: center;
     
 }
+
+.menu_flex {
+    display: flex;
+    align-items: flex-end;
+}
+
+.user_box {
+    position: fixed;
+    bottom: 10px;
+}
+
+.user_avatar {
+    margin: 10px 10px 10px 20px;
+}
+
+.user_text {
+    width: 100%;
+    vertical-align: middle;
+    color: rgba(255,255,255,.065);
+}

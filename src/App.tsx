@@ -7,10 +7,10 @@ import PrivateRoute from './components/login/PrivateRoute';
 import Bookmarks from './components/bookmarks/Bookmarks';
 import { Layout, Spin, Alert } from 'antd';
 
-import './global.scss';
-import styles from './index.module.scss';
 import { AuthContext } from './components/auth/AuthContext';
 import { IAuth } from './components/auth/useAuth';
+import './global.scss';
+import styles from './index.module.scss';
 
 const App: FC = () => {
   const { err, loading, user = '' } = useContext<IAuth>(AuthContext);
