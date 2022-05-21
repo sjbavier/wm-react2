@@ -1,28 +1,3 @@
-import { useToken } from "../components/auth/useAuth"
-
-class Client {
-
-
-    getToken(): string {
-        return localStorage.getItem('token') || ""
-    }
-
-    removeToken(): void {
-        localStorage.setItem('token', "")
-    }
-
-    isLoggedIn(): boolean {
-        return !!this.getToken()
-        // TODO: build out token validation
-    }
-
-    logout(): void {
-        this.removeToken()
-    }
-
-    
-}
-
 export type TRequest = {
     method: string
     path: string

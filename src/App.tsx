@@ -5,7 +5,7 @@ import LoginForm from './components/login/LoginForm';
 import SignupForm from './components/signup/SignupForm';
 import PrivateRoute from './components/login/PrivateRoute';
 import Bookmarks from './components/bookmarks/Bookmarks';
-import { Layout, Spin, Alert } from 'antd';
+import { Alert, Layout, Spin } from 'antd';
 
 import { AuthContext } from './components/auth/AuthContext';
 import { IAuth } from './components/auth/useAuth';
@@ -34,7 +34,7 @@ const App: FC = () => {
               <Route path="*" element={<div>404 nothing here</div>} />
             </Routes>
               {loading && <Spin />}
-              {/* {err && <Alert message={err} type='error' />} */}
+              {err && <Alert message={err} type='error' />}
           </div>
       </Layout>
     </div>

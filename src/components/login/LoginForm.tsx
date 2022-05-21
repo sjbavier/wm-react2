@@ -27,7 +27,7 @@ const LoginForm: FC = () => {
     const [fetching, setFetching] = useState(false);
     const navigate = useNavigate();
     const { setToken, setIsLoggedIn, setScopes, setUser, setUserId } = useContext<IAuth>(AuthContext);
-    const [redirectTo, setRedirectTo] = useSearchParams();
+    const [redirectTo] = useSearchParams();
 
     function onEmailChange(ev: any): void {
         setEmail(ev.target.value);
@@ -97,6 +97,7 @@ const LoginForm: FC = () => {
                             type="text"
                             value={email}
                             onChange={onEmailChange}
+                            autoFocus={true}
                         />
                     </Form.Item>
                     <Form.Item label="password" rules={[{ required: true }]}>

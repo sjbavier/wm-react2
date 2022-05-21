@@ -47,13 +47,13 @@ export const useAuth = () => {
     const hasFetched = useRef(false);
     useEffect(() => {
         let mounted = true;
-        setLoading(true);
         const request: TRequest = {
             method: 'GET',
             path: '/auth/authorize',
             token
         }
         if ( mounted && !hasFetched.current && token ) {
+            setLoading(true);
             hasFetched.current = true;
             fetchMe<TAuthResponse>(request)
                 .then((response: TAuthResponse) => {
@@ -65,6 +65,7 @@ export const useAuth = () => {
                 .catch((err: any) => {
                     setIsLoggedIn(false);
                     setToken('');
+                    debugger;
                     setErr(err);
                     console.log({err});
                 })
@@ -74,7 +75,7 @@ export const useAuth = () => {
                 mounted = false;
             }
         }
-    }, [token, scopes, isLoggedIn, err])
+    }, [token, setToken, scopes, isLoggedIn, err])
 
     const auth: IAuth = { 
         err, 

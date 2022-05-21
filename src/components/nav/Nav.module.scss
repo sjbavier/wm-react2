@@ -43,14 +43,26 @@
 .user_box {
     position: fixed;
     bottom: 10px;
-}
+    display: inline-grid;
+    grid-template-columns: [first] 52px [second] 2fr [third] 1fr;
+    column-gap: 10px;
+        border-top: 1px solid rgba(255,255,255, 0.09);
+    width: 200px;
 
-.user_avatar {
-    margin: 10px 10px 10px 20px;
-}
-
-.user_text {
-    width: 100%;
-    vertical-align: middle;
-    color: rgba(255,255,255,.065);
+    .user_avatar {
+        margin: 10px 10px 10px 20px;
+        align-self: center;
+    }
+    
+    .user_text {
+        vertical-align: middle;
+        color: $white65;
+        align-self: center;
+    }
+    .user_button {
+        background: none;
+        color: $white65;
+        border: none;
+        align-self: center;
+    }
 }

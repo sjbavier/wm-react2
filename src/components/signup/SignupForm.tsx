@@ -65,11 +65,11 @@ const SignupForm: FC = () => {
             fetchMe<{ message: string, access_token?: string }>
                 (request)
                 .then((response) => {
-                    setErr('')
-                    setMsg(response.message)
-                    let access_token = response.access_token || ''
-                    localStorage.setItem('token', access_token)
-                    // navigate("/dashboard", {replace: true})
+                    setErr('');
+                    setMsg(response.message);
+                    let access_token = response.access_token || '';
+                    localStorage.setItem('token', access_token);
+                    navigate("/login");
                 })
                 .catch((err) => {
                     setMsg('')

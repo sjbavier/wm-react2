@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useContext } from 'react'
+import { FC, useState, useEffect, useContext, useRef } from 'react'
 import { fetchMe, prettyError, TRequest } from '../../lib/Client'
 import { Table, Tag, Alert } from 'antd'
 import { AuthContext } from '../auth/AuthContext'
@@ -82,15 +82,17 @@ const Bookmarks: FC = () => {
       .finally(() => setIsLoading(false))
   }
 
+  const hasFetched = useRef(false)
   useEffect(() => {
     let mounted = true
-    if (mounted) {
+    if (mounted && !hasFetched.current) {
+      hasFetched.current = true;
       fetchPage()
     }
     return () => {
       mounted = false
     }
-  }, [])
+  }, [fetchPage])
 
   return (
     <div className={styles.wrapper}>

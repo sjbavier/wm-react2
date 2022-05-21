@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Avatar, Layout, Menu } from 'antd'
-import { UserOutlined, ApartmentOutlined, UserAddOutlined, HomeOutlined } from '@ant-design/icons'
+import { Avatar, Button, Layout, Menu } from 'antd'
+import { UserOutlined, ApartmentOutlined, UserAddOutlined, HomeOutlined, UpOutlined } from '@ant-design/icons'
 import { AuthContext } from '../auth/AuthContext'
 import webmaneLogo from '../../img/LionHeadLOGO.svg'
 
@@ -14,7 +14,7 @@ const Nav: FC = () => {
 
     const { Sider } = Layout
     const navigate = useNavigate()
-    const { isLoggedIn, setIsLoggedIn, setToken, scopes, user } = useContext(AuthContext)
+    const { isLoggedIn, setIsLoggedIn, setToken, user } = useContext(AuthContext)
 
     function logout(ev: React.MouseEvent<HTMLDivElement>) {
         setToken('');
@@ -57,9 +57,10 @@ const Nav: FC = () => {
                     }
                 </Menu>
                 {isLoggedIn && user && (
-                    <div style={{ 'position': 'fixed', 'bottom': 10 }}>
-                        <Avatar icon={<UserOutlined />} style={{ 'margin': '10px 10px 10px 20px' }} />
-                        <Text ellipsis={true} style={{ 'width': 100, 'verticalAlign': 'middle', 'color': 'rgba(255,255,255,0.65)'}}>{user}</Text>
+                    <div className={styles.user_box}>
+                        <Avatar icon={<UserOutlined />} className={styles.user_avatar} />
+                        <Text ellipsis={true} className={styles.user_text}>{user}</Text>
+                        <Button className={styles.user_button} icon={<UpOutlined />}></Button>
                     </div>
 
                 )}

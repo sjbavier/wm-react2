@@ -1,5 +1,5 @@
-import { useState, FC, Children } from 'react';
-import { useAuth, IAuth } from './useAuth'
+import { FC } from 'react';
+import { useAuth } from './useAuth'
 import { AuthContext } from './AuthContext';
 
 export const AuthProvider: FC = ({ children, ...props }): JSX.Element => {
