@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { fetchMe, TRequest } from '../../lib/Client';
+import { fetchMe, prettyError, TRequest } from '../../lib/Client';
 import { PERMISSION } from '../../lib/Permissions'
 
 type TAuthResponse = {
@@ -65,8 +65,7 @@ export const useAuth = () => {
                 .catch((err: any) => {
                     setIsLoggedIn(false);
                     setToken('');
-                    debugger;
-                    setErr(err);
+                    setErr(prettyError(err));
                     console.log({err});
                 })
                 .finally(() => setLoading(false))
