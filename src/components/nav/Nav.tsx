@@ -48,77 +48,78 @@ const Nav: FC = () => {
 
   return (
     <header>
-      <Sider breakpoint="md" collapsedWidth="0" className={index.maxHeight}>
-        <div className={styles.logo_wrapper} onClick={() => navigate("")}>
-          <img className={styles.logo} src={webmaneLogo} alt="Webmane logo" />
-        </div>
-        <h1 className={styles.logo_text}>webmane</h1>
-        <Menu theme="dark" mode="inline">
-          <Menu.Item icon={<HomeOutlined />} key="1">
-            <div onClick={() => navigate("")}>Home</div>
-          </Menu.Item>
-          {isLoggedIn && (
-            <>
-              <Menu.Item icon={<ApartmentOutlined />} key="3">
-                <Link to="/dashboard">Dashboard</Link>
-              </Menu.Item>
-            </>
-          )}
-        </Menu>
-
-        <div className={styles.user_box}>
-          <div className={styles.user_pop_up_wrapper} style={userMenu}>
-            {isLoggedIn && user && (
-              <>
-                <div className={styles.user_item} onClick={logout}>
-                  <div>
-                    <UserOutlined />
-                  </div>
-                  <div>Logout</div>
-                </div>
-                <div
-                  className={styles.user_item}
-                  onClick={() => navigate("/dashboard")}
-                >
-                  <div>
-                    <ApartmentOutlined />
-                  </div>
-                  <div>Dashboard</div>
-                </div>
-              </>
-            )}
-            {!isLoggedIn && (
-              <>
-                <div
-                  className={styles.user_item}
-                  onClick={() => navigate("/login")}
-                >
-                  <div>
-                    <UserOutlined />
-                  </div>
-                  <div>Login</div>
-                </div>
-                <div
-                  className={styles.user_item}
-                  onClick={() => navigate("/Signup")}
-                >
-                  <div>
-                    <UserAddOutlined />
-                  </div>
-                  <div>Signup</div>
-                </div>
-              </>
-            )}
+      <Sider className={styles.nav_wrapper} breakpoint="md" collapsedWidth="0">
+        <div className={styles.column_wrapper}>
+          <div className={styles.logo_wrapper} onClick={() => navigate("")}>
+            <img className={styles.logo} src={webmaneLogo} alt="Webmane logo" />
           </div>
-          <Avatar icon={<UserOutlined />} className={styles.user_avatar} />
-          <Text ellipsis={true} className={styles.user_text}>
-            {user ? user : "unknown"}
-          </Text>
-          <Button
-            className={styles.user_button}
-            icon={<UpOutlined />}
-            onClick={handleAvatarClick}
-          ></Button>
+          <h1 className={styles.logo_text}>webmane</h1>
+          <Menu theme="dark" mode="inline" className={styles.flex_grow_1}>
+            <Menu.Item icon={<HomeOutlined />} key="1">
+              <div onClick={() => navigate("")}>Home</div>
+            </Menu.Item>
+            {isLoggedIn && (
+              <>
+                <Menu.Item icon={<ApartmentOutlined />} key="3">
+                  <Link to="/dashboard">Dashboard</Link>
+                </Menu.Item>
+              </>
+            )}
+          </Menu>
+
+          <div className={styles.user_box} onClick={handleAvatarClick}>
+            <div className={styles.user_pop_up_wrapper} style={userMenu}>
+              {isLoggedIn && user && (
+                <>
+                  <div className={styles.user_item} onClick={logout}>
+                    <div>
+                      <UserOutlined />
+                    </div>
+                    <div>Logout</div>
+                  </div>
+                  <div
+                    className={styles.user_item}
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    <div>
+                      <ApartmentOutlined />
+                    </div>
+                    <div>Dashboard</div>
+                  </div>
+                </>
+              )}
+              {!isLoggedIn && (
+                <>
+                  <div
+                    className={styles.user_item}
+                    onClick={() => navigate("/login")}
+                  >
+                    <div>
+                      <UserOutlined />
+                    </div>
+                    <div>Login</div>
+                  </div>
+                  <div
+                    className={styles.user_item}
+                    onClick={() => navigate("/Signup")}
+                  >
+                    <div>
+                      <UserAddOutlined />
+                    </div>
+                    <div>Signup</div>
+                  </div>
+                </>
+              )}
+            </div>
+            <Avatar icon={<UserOutlined />} className={styles.user_avatar} />
+            <Text ellipsis={true} className={styles.user_text}>
+              {user ? user : "unknown"}
+            </Text>
+            <Button
+              className={styles.user_button}
+              icon={<UpOutlined />}
+            ></Button>
+          </div>
         </div>
       </Sider>
     </header>

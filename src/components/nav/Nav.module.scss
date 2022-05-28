@@ -1,5 +1,18 @@
 @import "../../global.scss";
 
+.nav_wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.column_wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .menu {
   height: 150px;
   color: $black;
@@ -39,6 +52,10 @@
   align-items: flex-end;
 }
 
+.flex_grow_1 {
+  flex-grow: 1;
+}
+
 .user_pop_up_wrapper {
   position: absolute;
   bottom: 53px;
@@ -46,15 +63,14 @@
   grid-template-columns: 1fr 1fr;
   color: $white65;
   border-top: 1px solid rgba(255, 255, 255, 0.09);
-  background: #04203a;
   opacity: 0;
   display: none;
-  .active{
+  .active {
     display: inline-grid;
     opacity: 100;
   }
-  :nth-child(odd) {
-      border-right: 1px solid rgba(255, 255, 255, 0.09);
+  :nth-child(odd) .user_item {
+    border-right: 1px solid rgba(255, 255, 255, 0.09);
   }
   .user_item {
     height: 4.5rem;
@@ -64,24 +80,32 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    cursor: pointer;
+    background: darken($dark_bg, 3%);
+    &:hover {
+      background: lighten($dark_bg, 5%);
+    }
     div {
       align-self: center;
       align-items: center;
       font-size: 0.9em;
       color: $white65;
     }
-
   }
 }
 
 .user_box {
-  position: fixed;
-  bottom: 10px;
   display: inline-grid;
   grid-template-columns: [first] 52px [second] 2fr [third] 1fr;
   column-gap: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.09);
   width: 200px;
+  user-select: none;
+  cursor: pointer;
+  background: $dark_bg;
+  &:hover {
+    background: lighten($dark_bg, 5%);
+  }
 
   .user_avatar {
     margin: 10px 10px 10px 20px;
