@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { fetchMe, prettyError, TRequest } from '../../lib/Client';
 import { PERMISSION } from '../../lib/Permissions'
 
@@ -44,32 +44,39 @@ export const useAuth = () => {
     const [err, setErr] = useState<string | any>('');
     const [loading, setLoading] = useState<boolean>(false);
 
-    const hasFetched = useRef(false);
-    useEffect(() => {
-        let mounted = true;
+
+    const fetchUser = useCallback(() => {
+        
         const request: TRequest = {
             method: 'GET',
             path: '/auth/authorize',
             token
         }
+
+        fetchMe<TAuthResponse>(request)
+            .then((response: TAuthResponse) => {
+                setUserId(response.userId);
+                setUser(response.user);
+                setScopes(PERMISSION[response.role.toUpperCase()]);
+                setIsLoggedIn(true);
+            })
+            .catch((err: any) => {
+                setIsLoggedIn(false);
+                setToken('');
+                setErr(prettyError(err));
+                console.log({err});
+            })
+            .finally(() => setLoading(false))
+    
+        }, [token])
+
+    const hasFetched = useRef(false);
+    useEffect(() => {
+        let mounted = true;
         if ( mounted && !hasFetched.current && token ) {
             setLoading(true);
             hasFetched.current = true;
-            fetchMe<TAuthResponse>(request)
-                .then((response: TAuthResponse) => {
-                    setUserId(response.userId);
-                    setUser(response.user);
-                    setScopes(PERMISSION[response.role.toUpperCase()]);
-                    setIsLoggedIn(true);
-                })
-                .catch((err: any) => {
-                    setIsLoggedIn(false);
-                    setToken('');
-                    setErr(prettyError(err));
-                    console.log({err});
-                })
-                .finally(() => setLoading(false))
-
+            fetchUser()
             return () => {
                 mounted = false;
             }

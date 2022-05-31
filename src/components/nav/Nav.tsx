@@ -19,14 +19,15 @@ import { nodeModuleNameResolver } from "typescript";
 const Nav: FC = () => {
   const { Sider } = Layout;
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn, setToken, user } = useContext(AuthContext);
+  const { isLoggedIn, setIsLoggedIn, setToken, user, setUser } =
+    useContext(AuthContext);
   const [loginOpacity, setLoginOpacity] = useState<number>(0);
   const [loginDisplay, setLoginDisplay] = useState<string>("none");
-  const [userPop, setUserPop] = useState<boolean>(false);
 
   function logout(ev: React.MouseEvent<HTMLDivElement>) {
     setToken("");
     setIsLoggedIn(false);
+    setUser(undefined);
     navigate("");
   }
 
