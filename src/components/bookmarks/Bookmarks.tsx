@@ -1,9 +1,10 @@
-import { FC, useState, useEffect, useContext, useRef } from "react";
+import { FC, useState, useEffect, useContext, useCallback } from "react";
 import { fetchMe, prettyError, TRequest } from "../../lib/Client";
 import { Table, Tag, Alert } from "antd";
 import { AuthContext } from "../auth/AuthContext";
 
 import styles from "./Bookmarks.module.scss";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Bookmarks: FC = () => {
   interface IResult {
@@ -23,13 +24,14 @@ const Bookmarks: FC = () => {
   }
   const [bookmarks, setBookmarks] = useState<IBookmarks[] | []>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
   const [err, setErr] = useState<string | undefined>(undefined);
   const [totalBookmarks, setTotalBookmarks] = useState<number | undefined>(
     undefined
   );
   const { token } = useContext(AuthContext);
+
+  const { page, pageSize } = useParams();
+  const navigate = useNavigate();
 
   const columns = [
     {
@@ -71,28 +73,29 @@ const Bookmarks: FC = () => {
     },
   ];
 
-  const fetchPage = async (page: number = 1, pageSize: number = 10) => {
-    const request: TRequest = {
-      method: "GET",
-      path: `/api/bookmarks/page/${page}/page_size/${pageSize}`,
-      token: token,
-    };
-    setIsLoading(true);
-    fetchMe<IResult>(request)
-      .then((data) => {
-        setBookmarks(data.data);
-        setTotalBookmarks(data.bookmarks_total);
-      })
-      .catch((err) => setErr(prettyError(err)))
-      .finally(() => setIsLoading(false));
-  };
+  const fetchPage = useCallback(
+    async (page = 1, pageSize = 10) => {
+      const request: TRequest = {
+        method: "GET",
+        path: `/api/bookmarks/page/${page}/page_size/${pageSize}`,
+        token: token,
+      };
+      setIsLoading(true);
+      fetchMe<IResult>(request)
+        .then((data) => {
+          setBookmarks(data.data);
+          setTotalBookmarks(data.bookmarks_total);
+        })
+        .catch((err) => setErr(prettyError(err)))
+        .finally(() => setIsLoading(false));
+    },
+    [page, pageSize]
+  );
 
-  const hasFetched = useRef(false);
   useEffect(() => {
     let mounted = true;
-    if (mounted && !hasFetched.current) {
-      hasFetched.current = true;
-      fetchPage();
+    if (mounted) {
+      fetchPage(page, pageSize);
     }
     return () => {
       mounted = false;
@@ -110,12 +113,10 @@ const Bookmarks: FC = () => {
             dataSource={bookmarks}
             scroll={{ x: true }}
             pagination={{
-              pageSize: pageSize,
+              pageSize: parseInt(pageSize),
               total: totalBookmarks,
               onChange: (page, pageSize) => {
-                setPage(page);
-                setPageSize(pageSize);
-                fetchPage(page, pageSize);
+                navigate(`/dashboard/page/${page}/page_size/${pageSize}`);
               },
             }}
           />

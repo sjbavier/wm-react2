@@ -82,7 +82,9 @@ const LoginForm: FC = () => {
         .finally(() => {
           setFetching(false);
           let redirect: string | null = redirectTo.get("redirectTo");
-          redirect ? navigate(redirect) : navigate("/dashboard");
+          redirect
+            ? navigate(redirect)
+            : navigate("/dashboard/page/1/page_size/10");
         });
     }
   }

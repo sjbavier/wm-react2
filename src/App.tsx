@@ -26,7 +26,7 @@ const App: FC = () => {
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
             <Route
-              path="/dashboard"
+              path="/dashboard/page/:page/page_size/:pageSize"
               element={
                 <PrivateRoute user={user}>
                   <div className={styles.card_wrapper}>
