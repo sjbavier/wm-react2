@@ -11,10 +11,8 @@ import {
 import { AuthContext } from "../auth/AuthContext";
 import webmaneLogo from "../../img/LionHeadLOGO.svg";
 
-import index from "../../index.module.scss";
 import styles from "./Nav.module.scss";
 import Text from "antd/lib/typography/Text";
-import { nodeModuleNameResolver } from "typescript";
 
 const Nav: FC = () => {
   const { Sider } = Layout;
@@ -24,12 +22,12 @@ const Nav: FC = () => {
   const [loginOpacity, setLoginOpacity] = useState<number>(0);
   const [loginDisplay, setLoginDisplay] = useState<string>("none");
 
-  function logout(ev: React.MouseEvent<HTMLDivElement>) {
+  const logout = (ev: React.MouseEvent<HTMLDivElement>) => {
     setToken("");
     setIsLoggedIn(false);
     setUser(undefined);
     navigate("");
-  }
+  };
 
   const userMenu = {
     opacity: loginOpacity,

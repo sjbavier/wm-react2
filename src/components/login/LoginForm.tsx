@@ -34,15 +34,15 @@ const LoginForm: FC = () => {
     useContext<IAuth>(AuthContext);
   const [redirectTo] = useSearchParams();
 
-  function onEmailChange(ev: any): void {
+  const onEmailChange = (ev: any): void => {
     setEmail(ev.target.value);
-  }
+  };
 
-  function onPasswordChange(ev: any): void {
+  const onPasswordChange = (ev: any): void => {
     setPassword(ev.target.value);
-  }
+  };
 
-  function formSubmit(values: TFValues): void {
+  const formSubmit = (values: TFValues): void => {
     setErr("");
     setMsg("");
     let formData = {
@@ -87,7 +87,7 @@ const LoginForm: FC = () => {
             : navigate("/dashboard/page/1/page_size/10");
         });
     }
-  }
+  };
 
   return (
     <div className={styles.flex}>

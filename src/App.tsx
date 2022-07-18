@@ -19,7 +19,7 @@ const App: FC = () => {
   return (
     <div id="app_wrapper" className={styles.maxHeight}>
       <Layout>
-        <Nav></Nav>
+        <Nav />
         <div className={styles.wrapper}>
           <Routes>
             <Route path="/" element={<div>Home</div>} />
