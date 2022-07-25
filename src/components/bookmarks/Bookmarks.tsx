@@ -3,30 +3,20 @@ import { Table, Tag } from 'antd';
 
 import styles from './Bookmarks.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import useClient, { TRequest } from '../../hooks/useClient';
+import useClient from '../../hooks/useClient';
 import { VERBOSITY } from '../../lib/constants';
+import { IBookmarks, ICategory, TRequest } from '../../models/models';
+import Search from './search/search';
 
 const Bookmarks: FC = () => {
   interface IResult {
     num_pages?: number;
     bookmarks_total?: number;
-    data?: IBookmarks[];
-  }
-  interface IBookmarks {
-    title: string;
-    bookmark_id: number;
-    categories_collection: ICategory[];
-    link: string;
-  }
-  interface ICategory {
-    name: string;
-    category_id: number;
+    data?: IBookmarks[] | [];
   }
 
-  const [bookmarks, setBookmarks] = useState<IBookmarks[] | undefined>(
-    undefined
-  );
-  const { fetchMe, loading: isLoading } = useClient(VERBOSITY.NORMAL);
+  const [bookmarks, setBookmarks] = useState<IBookmarks[] | []>([]);
+  const { fetchMe, loading: isLoading } = useClient(VERBOSITY.SILENT);
   const [totalBookmarks, setTotalBookmarks] = useState<number | undefined>(
     undefined
   );
@@ -90,7 +80,7 @@ const Bookmarks: FC = () => {
 
     const getBookmarks = async () => {
       const data: IResult = await fetchMe(request);
-      setBookmarks(data?.data);
+      setBookmarks(data?.data ? data?.data : []);
       setTotalBookmarks(data?.bookmarks_total);
     };
 
@@ -105,6 +95,7 @@ const Bookmarks: FC = () => {
   return (
     <div className={styles.wrapper}>
       <h1>bookmarks</h1>
+      <Search bookmarks={bookmarks} setBookmarks={setBookmarks} />
       <div>
         <Table
           className="bookmarks"

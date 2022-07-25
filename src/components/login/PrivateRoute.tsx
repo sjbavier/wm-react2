@@ -1,10 +1,10 @@
-import { useContext } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { IAuth } from "../auth/useAuth";
-import { AuthContext } from "../auth/AuthContext";
+import { useContext } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { IAuth } from '../auth/useAuth';
+import { AuthContext } from '../auth/AuthContext';
 
 const PrivateRoute = ({
-  children,
+  children
 }: {
   children: JSX.Element;
   user: string;

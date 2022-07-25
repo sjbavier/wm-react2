@@ -1,14 +1,8 @@
 import { useCallback, useContext, useState } from 'react';
 import { AuthContext } from '../components/auth/AuthContext';
 import { VERBOSITY } from '../lib/constants';
+import { TRequest } from '../models/models';
 import useNotifications from './useNotifications';
-
-export type TRequest = {
-  method: string;
-  path: string;
-  data?: any;
-  token?: string;
-};
 
 // const apiErrors = {
 //     401: 'Unauthorized',
@@ -50,7 +44,6 @@ export default function useClient(verbosity?: string) {
       return fetch(`${request.path}`, reqOptions)
         .then((response) => {
           setLoading(false);
-          debugger;
           if (!response.ok) {
             //   Error Notifications
             switch (verbosity) {
@@ -90,7 +83,7 @@ export default function useClient(verbosity?: string) {
               break;
             case VERBOSITY.VERBOSE:
               setNotification({
-                message: `Error: ${response.status} ${response.statusText}`,
+                message: `Success: ${response.status} ${response.statusText}`,
                 duration: 10
               });
               break;

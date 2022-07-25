@@ -1,18 +1,18 @@
-import React, { FC, useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Avatar, Button, Layout, Menu } from "antd";
+import React, { FC, useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Avatar, Button, Layout, Menu } from 'antd';
 import {
   UserOutlined,
   ApartmentOutlined,
   UserAddOutlined,
   HomeOutlined,
-  UpOutlined,
-} from "@ant-design/icons";
-import { AuthContext } from "../auth/AuthContext";
-import webmaneLogo from "../../img/LionHeadLOGO.svg";
+  UpOutlined
+} from '@ant-design/icons';
+import { AuthContext } from '../auth/AuthContext';
+import webmaneLogo from '../../img/LionHeadLOGO.svg';
 
-import styles from "./Nav.module.scss";
-import Text from "antd/lib/typography/Text";
+import styles from './Nav.module.scss';
+import Text from 'antd/lib/typography/Text';
 
 const Nav: FC = () => {
   const { Sider } = Layout;
@@ -20,47 +20,47 @@ const Nav: FC = () => {
   const { isLoggedIn, setIsLoggedIn, setToken, user, setUser } =
     useContext(AuthContext);
   const [loginOpacity, setLoginOpacity] = useState<number>(0);
-  const [loginDisplay, setLoginDisplay] = useState<string>("none");
+  const [loginDisplay, setLoginDisplay] = useState<string>('none');
 
   const logout = (ev: React.MouseEvent<HTMLDivElement>) => {
-    setToken("");
+    setToken('');
     setIsLoggedIn(false);
     setUser(undefined);
-    navigate("");
+    navigate('');
   };
 
   const userMenu = {
     opacity: loginOpacity,
-    display: loginDisplay,
+    display: loginDisplay
   };
 
   const handleAvatarClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.preventDefault();
     if (loginOpacity) {
       setLoginOpacity(0);
-      setLoginDisplay("none");
+      setLoginDisplay('none');
       return;
     }
     setLoginOpacity(100);
-    setLoginDisplay("inline-grid");
+    setLoginDisplay('inline-grid');
   };
 
   return (
     <header>
       <Sider className={styles.nav_wrapper} breakpoint="md" collapsedWidth="0">
         <div className={styles.column_wrapper}>
-          <div className={styles.logo_wrapper} onClick={() => navigate("")}>
+          <div className={styles.logo_wrapper} onClick={() => navigate('')}>
             <img className={styles.logo} src={webmaneLogo} alt="Webmane logo" />
           </div>
           <h1 className={styles.logo_text}>webmane</h1>
           <Menu theme="dark" mode="inline" className={styles.flex_grow_1}>
             <Menu.Item icon={<HomeOutlined />} key="1">
-              <div onClick={() => navigate("")}>Home</div>
+              <div onClick={() => navigate('')}>Home</div>
             </Menu.Item>
             {isLoggedIn && (
               <>
                 <Menu.Item icon={<ApartmentOutlined />} key="3">
-                  <Link to="/dashboard">Dashboard</Link>
+                  <Link to="/dashboard/page/1/page_size/10">Dashboard</Link>
                 </Menu.Item>
               </>
             )}
@@ -78,7 +78,7 @@ const Nav: FC = () => {
                   </div>
                   <div
                     className={styles.user_item}
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() => navigate('/dashboard')}
                   >
                     <div>
                       <ApartmentOutlined />
@@ -91,7 +91,7 @@ const Nav: FC = () => {
                 <>
                   <div
                     className={styles.user_item}
-                    onClick={() => navigate("/login")}
+                    onClick={() => navigate('/login')}
                   >
                     <div>
                       <UserOutlined />
@@ -100,7 +100,7 @@ const Nav: FC = () => {
                   </div>
                   <div
                     className={styles.user_item}
-                    onClick={() => navigate("/Signup")}
+                    onClick={() => navigate('/Signup')}
                   >
                     <div>
                       <UserAddOutlined />
@@ -112,7 +112,7 @@ const Nav: FC = () => {
             </div>
             <Avatar icon={<UserOutlined />} className={styles.user_avatar} />
             <Text ellipsis={true} className={styles.user_text}>
-              {user ? user : "unknown"}
+              {user ? user : 'unknown'}
             </Text>
             <Button
               className={styles.user_button}
