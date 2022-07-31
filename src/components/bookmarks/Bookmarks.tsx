@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useCallback, useMemo } from 'react';
 import { Table, Tag } from 'antd';
 
 import styles from './Bookmarks.module.scss';
@@ -70,32 +70,43 @@ const Bookmarks: FC = () => {
       )
     }
   ];
+  const getBookmarks = useCallback(
+    async (request: TRequest) => {
+      const data: IResult = await fetchMe(request);
+      setBookmarks(data?.data ? data?.data : []);
+      setTotalBookmarks(data?.bookmarks_total);
+    },
+    [fetchMe]
+  );
 
-  useEffect(() => {
-    let mounted = true;
+  const getParameters = useMemo(() => {
     const request: TRequest = {
       method: 'GET',
       path: `/api/bookmarks/page/${page}/page_size/${pageSize}`
     };
+    return request;
+  }, [page, pageSize]);
 
-    const getBookmarks = async () => {
-      const data: IResult = await fetchMe(request);
-      setBookmarks(data?.data ? data?.data : []);
-      setTotalBookmarks(data?.bookmarks_total);
-    };
+  useEffect(() => {
+    let mounted = true;
 
     if (mounted) {
-      getBookmarks();
+      getBookmarks(getParameters);
     }
     return () => {
       mounted = false;
     };
-  }, [fetchMe, page, pageSize]);
+  }, [getBookmarks, getParameters]);
 
   return (
     <div className={styles.wrapper}>
       <h1>bookmarks</h1>
-      <Search bookmarks={bookmarks} setBookmarks={setBookmarks} />
+      <Search
+        bookmarks={bookmarks}
+        setBookmarks={setBookmarks}
+        getParameters={getParameters}
+        getBookmarks={getBookmarks}
+      />
       <div>
         <Table
           className="bookmarks"
@@ -104,7 +115,7 @@ const Bookmarks: FC = () => {
           dataSource={bookmarks}
           scroll={{ x: true }}
           pagination={{
-            pageSize: parseInt(pageSize),
+            pageSize: pageSize ? parseInt(pageSize) : undefined,
             total: totalBookmarks,
             onChange: (page, pageSize) => {
               navigate(`/dashboard/page/${page}/page_size/${pageSize}`);

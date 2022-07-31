@@ -8,9 +8,15 @@ import { IBookmarks, TRequest } from '../../../models/models';
 interface IBookmarksProps {
   bookmarks: IBookmarks[] | [];
   setBookmarks: Dispatch<SetStateAction<IBookmarks[] | []>>;
+  getBookmarks: (request: TRequest) => Promise<void>;
+  getParameters: TRequest;
 }
 
-function Search({ setBookmarks }: IBookmarksProps) {
+function Search({
+  setBookmarks,
+  getBookmarks,
+  getParameters
+}: IBookmarksProps) {
   const [search, setSearch] = useState('');
   const { fetchMe, loading: isLoading } = useClient(VERBOSITY.NORMAL);
 
@@ -22,18 +28,23 @@ function Search({ setBookmarks }: IBookmarksProps) {
     debounce(async (request: TRequest) => {
       const response: IResponse = await fetchMe(request);
       setBookmarks(response?.data);
-    }, 500)
+    }, 1000)
   ).current;
 
   const onSearchChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(ev.target.value);
-    searchSubmit();
+    const searchValue: string = ev.target.value.trim();
+    if (searchValue === '') {
+      getBookmarks(getParameters);
+    } else {
+      setSearch(searchValue);
+      searchSubmit(searchValue);
+    }
   };
 
-  const searchSubmit = async () => {
+  const searchSubmit = async (e: string) => {
     const request: TRequest = {
       method: 'GET',
-      path: `/api/bookmarks/search/${search}`
+      path: `/api/bookmarks/search/${e}`
     };
     if (!isLoading) {
       debouncedSearch(request);
@@ -42,15 +53,7 @@ function Search({ setBookmarks }: IBookmarksProps) {
 
   return (
     <Form labelCol={{ span: 10 }} onFinish={(values) => searchSubmit}>
-      <Form.Item
-        name="search"
-        label="search"
-        rules={[
-          { whitespace: true },
-          { type: 'string', message: 'Valid search required' }
-        ]}
-        hasFeedback
-      >
+      <Form.Item name="search" label="search" hasFeedback>
         <Input
           placeholder="search"
           type="text"
