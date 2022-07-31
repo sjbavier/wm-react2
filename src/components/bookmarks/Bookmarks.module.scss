@@ -1,9 +1,13 @@
-@import '../../global.scss';
+@import "../../global.scss";
 
 .card {
-    width: 25%;
+  width: 25%;
 }
 
 .wrapper {
-    padding: $unit * 3;
+  padding: $unit * 3;
+}
+
+.mt1 {
+  margin-top: 0.4rem !important;
 }

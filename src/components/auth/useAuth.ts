@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { fetchMe, prettyError, TRequest } from '../../lib/Client';
 import { PERMISSION } from '../../lib/Permissions'
 
@@ -45,7 +45,7 @@ export const useAuth = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
 
-    const fetchUser = useCallback(() => {
+    const fetchUser = useCallback(async () => {
         
         const request: TRequest = {
             method: 'GET',
@@ -60,7 +60,7 @@ export const useAuth = () => {
                 setScopes(PERMISSION[response.role.toUpperCase()]);
                 setIsLoggedIn(true);
             })
-            .catch((err: any) => {
+            .catch((err) => {
                 setIsLoggedIn(false);
                 setToken('');
                 setErr(prettyError(err));
@@ -68,12 +68,14 @@ export const useAuth = () => {
             })
             .finally(() => setLoading(false))
     
-        }, [token])
+        }, [token, setToken])
 
     const hasFetched = useRef(false);
     useEffect(() => {
         let mounted = true;
-        if ( mounted && !hasFetched.current && token ) {
+        if ( mounted && 
+            !hasFetched.current &&
+             token ) {
             setLoading(true);
             hasFetched.current = true;
             fetchUser()
@@ -81,7 +83,7 @@ export const useAuth = () => {
                 mounted = false;
             }
         }
-    }, [token, setToken, scopes, isLoggedIn, err])
+    }, [token, setLoading, fetchUser])
 
     const auth: IAuth = { 
         err, 

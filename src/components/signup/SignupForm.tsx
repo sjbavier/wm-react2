@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { fetchMe, prettyError, TRequest } from "../../lib/Client";
 import { useNavigate } from "react-router-dom";
 import { Form, Input, Button, Alert } from "antd";
@@ -19,12 +19,13 @@ const SignupForm: FC = () => {
   const [fetching, setFetching] = useState(false);
   const navigate = useNavigate();
 
-  function clearMessages(): void {
+  const clearAll = (): void => {
     setMsg("");
     setErr("");
-  }
+    setFetching(false);
+  };
 
-  function formSubmit(values: TValues): void {
+  const formSubmit = (values: TValues): void => {
     setErr("");
     setMsg("");
     let formData = {
@@ -52,9 +53,9 @@ const SignupForm: FC = () => {
           setMsg("");
           setErr(prettyError(err));
         })
-        .finally(() => setFetching(false));
+        .finally(() => clearAll());
     }
-  }
+  };
 
   return (
     <div className={styles.flex}>

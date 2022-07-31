@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^12.1.10",
     "@types/antd": "^1.0.0",
     "@types/jest": "^26.0.15",
+    "@types/lodash": "^4.14.182",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
@@ -17,6 +18,7 @@
     "antd": "^4.18.4",
     "craco-less": "^2.0.0",
     "history": "^5.2.0",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^6",
@@ -52,6 +54,7 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
+    "prettier": "^2.7.1",
     "typescript-plugin-css-modules": "^3.4.0"
   },
   "jest": {
