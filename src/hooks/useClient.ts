@@ -78,7 +78,7 @@ export default function useClient(verbosity?: string) {
               break;
             case VERBOSITY.NORMAL:
               setNotification({
-                message: `Success: ${response.status}`
+                message: `Success: ${response.statusText}`
               });
               break;
             case VERBOSITY.VERBOSE:
@@ -89,7 +89,7 @@ export default function useClient(verbosity?: string) {
               break;
             default:
               setNotification({
-                message: `Error: ${response.status}`
+                message: `Success: ${response.statusText}`
               });
           }
           return response.json() as Promise<T>;
