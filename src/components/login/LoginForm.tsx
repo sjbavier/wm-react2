@@ -1,19 +1,20 @@
-import { FC, useState, useContext } from "react";
-import { fetchMe, TRequest, prettyError } from "../../lib/Client";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Form, Input, Button, Alert } from "antd";
-import { AuthContext } from "../auth/AuthContext";
-import { IAuth } from "../auth/useAuth";
+import { FC, useState, useContext } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Form, Input, Button, Alert } from 'antd';
+import { AuthContext } from '../auth/AuthContext';
+import { IAuth } from '../auth/useAuth';
 
-import webmaneLogo from "../../img/LionHeadLOGO.svg";
+import webmaneLogo from '../../img/LionHeadLOGO.svg';
 
-import styles from "./Login.module.scss";
-import { PERMISSION } from "../../lib/Permissions";
+import styles from './Login.module.scss';
+import { PERMISSION } from '../../lib/Permissions';
+import useClient from '../../hooks/useClient';
+import { TRequest } from '../../models/models';
 
 type TLoginResponse = {
-  userId?: number;
-  user?: string;
-  role?: string;
+  userId: number;
+  user: string;
+  role: string;
   access_token?: string;
   message: string;
 };
@@ -24,15 +25,15 @@ type TFValues = {
 };
 
 const LoginForm: FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState("");
-  const [err, setErr] = useState("");
-  const [fetching, setFetching] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [msg, setMsg] = useState('');
+  const [err, setErr] = useState('');
   const navigate = useNavigate();
   const { setToken, setIsLoggedIn, setScopes, setUser, setUserId } =
     useContext<IAuth>(AuthContext);
   const [redirectTo] = useSearchParams();
+  const { fetchMe, loading } = useClient();
 
   const onEmailChange = (ev: any): void => {
     setEmail(ev.target.value);
@@ -42,50 +43,66 @@ const LoginForm: FC = () => {
     setPassword(ev.target.value);
   };
 
-  const formSubmit = (values: TFValues): void => {
-    setErr("");
-    setMsg("");
+  const formSubmit = async (values: TFValues) => {
+    setErr('');
+    setMsg('');
     let formData = {
       email: values.email,
-      password: values.password,
+      password: values.password
     };
     const request: TRequest = {
-      method: "POST",
-      path: "/auth/login",
-      data: formData,
+      method: 'POST',
+      path: '/auth/login',
+      data: formData
     };
-    if (!fetching) {
-      setFetching(true);
-      setMsg("Submitting");
-      fetchMe<TLoginResponse>(request)
-        .then((response: TLoginResponse) => {
-          setErr("");
-          setMsg(response.message);
-          response.access_token
-            ? setToken(response.access_token)
-            : setErr(err.concat("Garbo access_token \n"));
-          response.role
-            ? setScopes(PERMISSION[response.role.toUpperCase()])
-            : setErr(err.concat("Garbo role \n"));
-          response.user
-            ? setUser(response.user)
-            : setErr(err.concat("Garbo user \n"));
-          response.userId
-            ? setUserId(response.userId)
-            : setErr(err.concat("Garbo userId \n"));
-          setIsLoggedIn(true);
-        })
-        .catch((err) => {
-          setMsg("");
-          setErr(prettyError(err));
-        })
-        .finally(() => {
-          setFetching(false);
-          let redirect: string | null = redirectTo.get("redirectTo");
-          redirect
-            ? navigate(redirect)
-            : navigate("/dashboard/page/1/page_size/10");
-        });
+    if (!loading) {
+      setMsg('Submitting');
+
+      const response: TLoginResponse = await fetchMe(request);
+      if (response?.access_token) {
+        setToken(response.access_token);
+        setScopes(PERMISSION[response?.role.toUpperCase()]);
+        setUser(response.user);
+        setUserId(response.userId);
+        setIsLoggedIn(true);
+
+        let redirect: string | null = redirectTo.get('redirectTo');
+        redirect
+          ? navigate(redirect)
+          : navigate('/dashboard/page/1/page_size/10');
+      }
+
+      setMsg('');
+
+      // fetchMe<TLoginResponse>(request)
+      //   .then((response: TLoginResponse) => {
+      //     setErr("");
+      //     setMsg(response.message);
+      //     response.access_token
+      //       ? setToken(response.access_token)
+      //       : setErr(err.concat("Garbo access_token \n"));
+      //     response.role
+      //       ? setScopes(PERMISSION[response.role.toUpperCase()])
+      //       : setErr(err.concat("Garbo role \n"));
+      //     response.user
+      //       ? setUser(response.user)
+      //       : setErr(err.concat("Garbo user \n"));
+      //     response.userId
+      //       ? setUserId(response.userId)
+      //       : setErr(err.concat("Garbo userId \n"));
+      //     setIsLoggedIn(true);
+      //   })
+      //   .catch((err) => {
+      //     setMsg("");
+      //     setErr(prettyError(err));
+      //   })
+      //   .finally(() => {
+      //     setFetching(false);
+      //     let redirect: string | null = redirectTo.get("redirectTo");
+      //     redirect
+      //       ? navigate(redirect)
+      //       : navigate("/dashboard/page/1/page_size/10");
+      //   });
     }
   };
 
@@ -111,7 +128,7 @@ const LoginForm: FC = () => {
             rules={[
               { required: true },
               { whitespace: true },
-              { type: "email", message: "Valid email required" },
+              { type: 'email', message: 'Valid email required' }
             ]}
             hasFeedback
           >
@@ -127,13 +144,13 @@ const LoginForm: FC = () => {
             name="password"
             label="password"
             rules={[
-              { required: true, message: "Password required" },
+              { required: true, message: 'Password required' },
               {
-                type: "string",
+                type: 'string',
                 min: 8,
                 max: 30,
-                message: "Must be at least 8 characters",
-              },
+                message: 'Must be at least 8 characters'
+              }
             ]}
             hasFeedback
           >
@@ -145,7 +162,12 @@ const LoginForm: FC = () => {
             />
           </Form.Item>
           <Form.Item label="" wrapperCol={{ offset: 6 }}>
-            <Button type="primary" htmlType="submit">
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={loading}
+              disabled={loading}
+            >
               Login
             </Button>
           </Form.Item>
