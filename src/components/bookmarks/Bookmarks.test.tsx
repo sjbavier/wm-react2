@@ -6,9 +6,7 @@ import user from '@testing-library/user-event';
 import Bookmarks from './Bookmarks';
 
 describe('<Bookmarks> in <Router> context', () => {
-    it('renders without crashing, and displays logo', async () => {
-        render(
-            <Bookmarks />
-        );
-
-    });
+  it('renders without crashing, and displays logo', async () => {
+    render(<Bookmarks />);
+  });
+});

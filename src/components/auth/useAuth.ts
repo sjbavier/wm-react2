@@ -5,11 +5,12 @@ import { VERBOSITY } from '../../lib/constants';
 import { PERMISSION } from '../../lib/Permissions';
 import { TRequest } from '../../models/models';
 
-type TAuthResponse = {
+export type TAuthResponse = {
   userId: number;
   user: string;
   role: string;
   message: string;
+  msg?: string;
 };
 
 export interface IAuth {
@@ -25,6 +26,7 @@ export interface IAuth {
   setScopes: any;
   token?: string;
   setToken: any;
+  fetchUser: any;
 }
 
 export const useToken = (lToken: string) => {
@@ -43,7 +45,7 @@ export const useAuth = () => {
   const [user, setUser] = useState<string | undefined>(undefined);
   const [scopes, setScopes] = useState<string[] | undefined>(undefined);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [err, setErr] = useState<string | any>('');
+  const [err, setErr] = useState<TAuthResponse | any>('');
   const setNotification = useNotifications();
   const { fetchMe, loading } = useClient(VERBOSITY.NORMAL);
 
@@ -54,40 +56,43 @@ export const useAuth = () => {
       token
     };
 
-    const response: TAuthResponse = await fetchMe(request);
+    fetchMe<TAuthResponse>(request)
+      .then((response: TAuthResponse) => {
+        setUserId(response.userId);
+        setUser(response.user);
+        setScopes(PERMISSION[response.role.toUpperCase()]);
+        setIsLoggedIn(true);
+      })
+      .catch((err) => {
+        setUserId(undefined);
+        setUser(undefined);
+        setScopes(undefined);
+        setIsLoggedIn(false);
 
-    if (response?.user) {
-      setUserId(response.userId);
-      setUser(response.user);
-      setScopes(PERMISSION[response.role.toUpperCase()]);
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-      setToken('');
-      setErr(response);
-      setNotification({
-        message: 'Error',
-        description: `${response}`
+        setToken('');
+        setErr(err.msg);
+        setNotification({
+          message: 'Error',
+          description: `${err.msg}`
+        });
       });
-    }
 
-    // fetchMe<TAuthResponse>(request)
-    //   .then((response: TAuthResponse) => {
-    //     setUserId(response.userId);
-    //     setUser(response.user);
-    //     setScopes(PERMISSION[response.role.toUpperCase()]);
-    //     setIsLoggedIn(true);
-    //   })
-    //   .catch((err) => {
-    //     setIsLoggedIn(false);
-    //     setToken('');
-    //     setErr(prettyError(err));
-    //     setNotification({
-    //       message: 'Error',
-    //       description: `${err}`
-    //     });
-    //   })
-    //   .finally(() => setLoading(false));
+    // const response: TAuthResponse = await fetchMe(request);
+
+    // if (response?.user) {
+    //   setUserId(response.userId);
+    //   setUser(response.user);
+    //   setScopes(PERMISSION[response.role.toUpperCase()]);
+    //   setIsLoggedIn(true);
+    // } else {
+    //   setIsLoggedIn(false);
+    //   setToken('');
+    //   setErr(response?.msg || response?.message);
+    //   setNotification({
+    //     message: 'Error',
+    //     description: `${response}`
+    //   });
+    // }
   }, [token, setToken, setNotification, fetchMe]);
 
   const hasFetched = useRef(false);
@@ -114,7 +119,8 @@ export const useAuth = () => {
     scopes,
     setScopes,
     token,
-    setToken
+    setToken,
+    fetchUser
   };
 
   return auth;

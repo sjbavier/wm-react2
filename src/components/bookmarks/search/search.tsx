@@ -52,8 +52,12 @@ function Search({
   };
 
   return (
-    <Form labelCol={{ span: 10 }} onFinish={(values) => searchSubmit}>
-      <Form.Item name="search" label="search" hasFeedback>
+    <Form
+      labelCol={{ span: 2 }}
+      onFinish={(values) => searchSubmit}
+      style={{ marginTop: '2rem' }}
+    >
+      <Form.Item name="search" hasFeedback>
         <Input
           placeholder="search"
           type="text"
