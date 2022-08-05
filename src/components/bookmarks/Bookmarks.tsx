@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, useCallback, useMemo } from 'react';
-import { Table, Tag } from 'antd';
+import { Col, Row, Table, Tag } from 'antd';
 
 import styles from './Bookmarks.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -101,12 +101,16 @@ const Bookmarks: FC = () => {
   return (
     <div className={styles.wrapper}>
       <h1>bookmarks</h1>
-      <Search
-        bookmarks={bookmarks}
-        setBookmarks={setBookmarks}
-        getParameters={getParameters}
-        getBookmarks={getBookmarks}
-      />
+      <Row>
+        <Col span={16}>
+          <Search
+            bookmarks={bookmarks}
+            setBookmarks={setBookmarks}
+            getParameters={getParameters}
+            getBookmarks={getBookmarks}
+          />
+        </Col>
+      </Row>
       <div>
         <Table
           className="bookmarks"

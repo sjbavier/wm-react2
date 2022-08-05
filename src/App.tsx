@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Nav from './components/nav/Nav';
 import LoginForm from './components/login/LoginForm';
 import SignupForm from './components/signup/SignupForm';
-import PrivateRoute from './components/login/PrivateRoute';
+import PrivateRoute from './components/auth/PrivateRoute';
 import Bookmarks from './components/bookmarks/Bookmarks';
 import { Layout, Spin } from 'antd';
 
