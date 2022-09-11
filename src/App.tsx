@@ -5,6 +5,7 @@ import LoginForm from './components/login/LoginForm';
 import SignupForm from './components/signup/SignupForm';
 import PrivateRoute from './components/auth/PrivateRoute';
 import Bookmarks from './components/bookmarks/Bookmarks';
+import { ReferenceNav } from './components/reference/ReferenceNav';
 import { Layout, Spin } from 'antd';
 
 import { AuthContext } from './components/auth/AuthContext';
@@ -35,6 +36,7 @@ const App: FC = () => {
                 </PrivateRoute>
               }
             />
+            <Route path="/reference" element={<ReferenceNav />} />
             <Route path="*" element={<div>404 nothing here</div>} />
           </Routes>
           {loading && <Spin />}

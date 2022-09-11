@@ -22,7 +22,7 @@ export default function useClient(verbosity?: string) {
   const [success, setSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { token } = useContext(AuthContext);
+  const { token, setToken } = useContext(AuthContext);
   const setNotification = useNotifications();
 
   const fetchMe = useCallback(
@@ -43,9 +43,11 @@ export default function useClient(verbosity?: string) {
 
       return fetch(`${request.path}`, reqOptions)
         .then((response) => {
-          setLoading(false);
           if (!response.ok) {
             //   Error Notifications
+            setError(true);
+            setLoading(false);
+            if (response.status === 401) setToken('');
             switch (verbosity) {
               case VERBOSITY.SILENT:
                 break;
@@ -67,11 +69,11 @@ export default function useClient(verbosity?: string) {
                   message: `Error: ${response.status}`,
                   description: response.statusText.toString()
                 });
-                setError(true);
             }
             return response.json() as Promise<T>;
           }
           setSuccess(true);
+          setLoading(false);
           // Success Notifications
           switch (verbosity) {
             case VERBOSITY.SILENT:
@@ -99,10 +101,11 @@ export default function useClient(verbosity?: string) {
           setNotification({
             message: `Error: ${e}`
           });
+          setLoading(false);
           return e as Promise<T>;
         });
     },
-    [token, setNotification, verbosity]
+    [token, setNotification, verbosity, setToken]
   );
 
   return {

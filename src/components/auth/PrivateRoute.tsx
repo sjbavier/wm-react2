@@ -1,7 +1,8 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { Spin } from 'antd';
+import { useContext } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { IAuth } from './useAuth';
 import { AuthContext } from './AuthContext';
+import { IAuth, TOKEN_STATE } from './useAuth';
 
 const PrivateRoute = ({
   children
@@ -9,29 +10,26 @@ const PrivateRoute = ({
   children: JSX.Element;
   user: string; // todo future permissions
 }) => {
-  const { token, err, fetchUser } = useContext<IAuth>(AuthContext);
+  const { token, err, isComplete, loading } = useContext<IAuth>(AuthContext);
   let location = useLocation();
-
-  // async callback to eliminate multiple calls whem token and err are the delimiters
-  const nextRoute = useCallback(async () => {
-    await fetchUser();
-  }, [fetchUser]);
-  useEffect(() => {
-    if (token && err) {
-      nextRoute();
-    }
-  }, [token, err, nextRoute]);
-
-  if (!token) {
+  // console.log('isComplete', isComplete);
+  // console.log('token', token);
+  if (!token && (isComplete === TOKEN_STATE.PENDING || loading)) {
+    return <Spin size="large" />;
+  } else if (
+    !token &&
+    (isComplete === TOKEN_STATE.COMPLETE || isComplete === TOKEN_STATE.IDLE) &&
+    !loading
+  ) {
     return (
       <Navigate
         to={`/login?redirectTo=${location.pathname}`}
         state={{ from: location, err }}
       />
     );
+  } else {
+    return children;
   }
-
-  return children;
 };
 
 export default PrivateRoute;

@@ -62,6 +62,9 @@ const Nav: FC = () => {
                 <Menu.Item icon={<ApartmentOutlined />} key="3">
                   <Link to="/dashboard/page/1/page_size/10">Dashboard</Link>
                 </Menu.Item>
+                <Menu.Item icon={<ApartmentOutlined />} key="4">
+                  <Link to="/reference">Reference</Link>
+                </Menu.Item>
               </>
             )}
           </Menu>

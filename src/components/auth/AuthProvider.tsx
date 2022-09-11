@@ -16,7 +16,8 @@ export const AuthProvider: FC = ({ children, ...props }): JSX.Element => {
     setScopes,
     token,
     setToken,
-    fetchUser
+    fetchUser,
+    isComplete
   } = useAuth();
 
   return (
@@ -34,7 +35,8 @@ export const AuthProvider: FC = ({ children, ...props }): JSX.Element => {
         setScopes,
         token,
         setToken,
-        fetchUser
+        fetchUser,
+        isComplete
       }}
       {...props}
     >
