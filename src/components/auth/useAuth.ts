@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import useClient from '../../hooks/useClient';
 import useNotifications from '../../hooks/useNotifications';
 import { VERBOSITY } from '../../lib/constants';
@@ -108,18 +108,6 @@ export const useAuth = () => {
         });
     }
   }, [token, setToken, setNotification, fetchMe]);
-
-  const hasFetched = useRef(false);
-  useEffect(() => {
-    let mounted = true;
-    if (mounted && !hasFetched.current && !!token) {
-      hasFetched.current = true;
-      fetchUser();
-      return () => {
-        mounted = false;
-      };
-    }
-  }, [token, fetchUser]);
 
   const auth: IAuth = {
     err,
