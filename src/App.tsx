@@ -13,6 +13,7 @@ import { IAuth } from './components/auth/useAuth';
 import './antd.less';
 import './global.scss';
 import styles from './index.module.scss';
+import './App.css';
 
 const App: FC = () => {
   const { loading, user = '' } = useContext<IAuth>(AuthContext);

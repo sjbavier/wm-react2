@@ -1,7 +1,6 @@
 import { FC, useState, useEffect, useCallback, useMemo } from 'react';
 import { Col, Row, Table, Tag } from 'antd';
 
-import styles from './Bookmarks.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import useClient from '../../hooks/useClient';
 import { VERBOSITY } from '../../lib/constants';
@@ -37,14 +36,14 @@ const Bookmarks: FC = () => {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
-      render: (text: string) => <p>{text}</p>
+      render: (text: string) => <p className="break-words">{text}</p>
     },
     {
       title: 'Link',
       dataIndex: 'link',
       key: 'link',
       render: (link: string) => (
-        <a href={link} target="_blank" rel="noreferrer">
+        <a className="break-all" href={link} target="_blank" rel="noreferrer">
           {link}
         </a>
       )
@@ -57,11 +56,7 @@ const Bookmarks: FC = () => {
         <>
           {categories_collection.map((category) => {
             return (
-              <Tag
-                color="blue"
-                className={styles.mt1}
-                key={category.category_id}
-              >
+              <Tag color="blue" className="mt-1" key={category.category_id}>
                 {category.name.toUpperCase()}
               </Tag>
             );
@@ -99,7 +94,7 @@ const Bookmarks: FC = () => {
   }, [getBookmarks, getParameters]);
 
   return (
-    <div className={styles.wrapper}>
+    <div className="mt-3">
       <h1>bookmarks</h1>
       <Row>
         <Col span={16}>
