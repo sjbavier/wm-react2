@@ -1,6 +1,6 @@
 import { FC, useState, useContext } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
-import { Form, Input, Button, Alert } from 'antd';
+import { Form, Button, Alert } from 'antd';
 import { AuthContext } from '../auth/AuthContext';
 import { IAuth } from '../auth/useAuth';
 
@@ -10,6 +10,9 @@ import styles from './Login.module.scss';
 import { PERMISSION } from '../../lib/Permissions';
 import useClient from '../../hooks/useClient';
 import { TRequest } from '../../models/models';
+import styled from 'styled-components';
+import { NeuInput } from '../form/input/NeuInput';
+import { NeuButton } from '../button/NeuButton';
 
 type TLoginResponse = {
   userId: number;
@@ -80,7 +83,7 @@ const LoginForm: FC = () => {
   } else {
     return (
       <div className={styles.flex}>
-        <div className={styles.login_form}>
+        <LoginContainer>
           <div className={styles.logo_wrapper}>
             <div className={styles.logo_item}>
               <img
@@ -103,7 +106,7 @@ const LoginForm: FC = () => {
               ]}
               hasFeedback
             >
-              <Input
+              <NeuInput
                 placeholder="email"
                 type="text"
                 value={email}
@@ -124,7 +127,7 @@ const LoginForm: FC = () => {
               ]}
               hasFeedback
             >
-              <Input
+              <NeuInput
                 placeholder="password"
                 type="password"
                 value={password}
@@ -132,22 +135,29 @@ const LoginForm: FC = () => {
               />
             </Form.Item>
             <Form.Item label="" wrapperCol={{ offset: 6 }}>
-              <Button
+              <NeuButton
                 type="primary"
                 htmlType="submit"
                 loading={loading}
                 disabled={loading}
               >
                 Login
-              </Button>
+              </NeuButton>
             </Form.Item>
           </Form>
           {msg && <Alert message={msg} type="success" />}
           {err && <Alert message={err} type="error" />}
-        </div>
+        </LoginContainer>
       </div>
     );
   }
 };
+
+const LoginContainer = styled.div`
+  border-radius: 30px;
+  background: #1b1e2b;
+  box-shadow: inset 12px 12px 20px #0f1118, inset -12px -12px 20px #272c3e;
+  padding: 2.5rem;
+`;
 
 export default LoginForm;

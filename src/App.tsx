@@ -6,7 +6,7 @@ import SignupForm from './components/signup/SignupForm';
 import PrivateRoute from './components/auth/PrivateRoute';
 import Bookmarks from './components/bookmarks/Bookmarks';
 import { ReferenceNav } from './components/reference/ReferenceNav';
-import { Layout, Spin } from 'antd';
+import { Spin } from 'antd';
 
 import { AuthContext } from './components/auth/AuthContext';
 import { IAuth } from './components/auth/useAuth';
@@ -15,14 +15,16 @@ import './global.scss';
 import styles from './index.module.scss';
 import './App.css';
 
+import styled from 'styled-components';
+
 const App: FC = () => {
   const { loading, user = '' } = useContext<IAuth>(AuthContext);
 
   return (
     <div id="app_wrapper" className={styles.maxHeight}>
-      <Layout>
+      <LayoutWrapper>
         <Nav />
-        <div className={styles.wrapper}>
+        <div className="h-screen w-full overflow-y-scroll p-8">
           <Routes>
             <Route path="/" element={<div>Home</div>} />
             <Route path="/login" element={<LoginForm />} />
@@ -42,9 +44,18 @@ const App: FC = () => {
           </Routes>
           {loading && <Spin />}
         </div>
-      </Layout>
+      </LayoutWrapper>
     </div>
   );
 };
+
+const LayoutWrapper = styled.div`
+  display: flex;
+  flex: auto;
+  flex-direction: row;
+  box-sizing: border-box;
+  min-height: 0;
+  background: #1b1e2b;
+`;
 
 export default App;
