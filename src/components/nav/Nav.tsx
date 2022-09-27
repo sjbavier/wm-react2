@@ -13,16 +13,15 @@ import {
 import { AuthContext } from '../auth/AuthContext';
 import webmaneLogo from '../../img/LionHeadLOGO.svg';
 
-import styles from './Nav.module.scss';
 import Text from 'antd/lib/typography/Text';
 import styled from 'styled-components';
+import { DivWrapper } from '../../models/models';
 
 const Nav: FC = () => {
   const navigate = useNavigate();
   const { isLoggedIn, setIsLoggedIn, setToken, user, setUser } =
     useContext(AuthContext);
-  const [loginOpacity, setLoginOpacity] = useState<number>(0);
-  const [loginDisplay, setLoginDisplay] = useState<string>('none');
+  const [popUp, setPopUp] = useState<boolean>(false);
 
   const logout = (ev: React.MouseEvent<HTMLDivElement>) => {
     setToken('');
@@ -31,30 +30,30 @@ const Nav: FC = () => {
     navigate('');
   };
 
-  const userMenu = {
-    opacity: loginOpacity,
-    display: loginDisplay
-  };
-
   const handleAvatarClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.preventDefault();
-    if (loginOpacity) {
-      setLoginOpacity(0);
-      setLoginDisplay('none');
-      return;
-    }
-    setLoginOpacity(100);
-    setLoginDisplay('inline-grid');
+    console.log(popUp);
+    setPopUp(!popUp);
   };
 
   return (
     <header>
       <NavWrapper className="flex h-screen flex-col flex-wrap ">
-        <div className={styles.column_wrapper}>
-          <div className={styles.logo_wrapper} onClick={() => navigate('')}>
-            <img className={styles.logo} src={webmaneLogo} alt="Webmane logo" />
+        <div className="flex flex-col h-full">
+          <div
+            className="flex justify-center items-center cursor-pointer"
+            onClick={() => navigate('')}
+          >
+            <img
+              className="w-full pt-6 pb-3"
+              src={webmaneLogo}
+              alt="Webmane logo"
+              style={{ maxWidth: 'calc(200px / 4)' }}
+            />
           </div>
-          <h1 className={styles.logo_text}>webmane</h1>
+          <h1 className="text-zinc-50 text-center tracking-widest text-xs">
+            webmane
+          </h1>
           <div className="grow ">
             <Button
               type="primary"
@@ -86,64 +85,122 @@ const Nav: FC = () => {
             )}
           </div>
 
-          <div className={styles.user_box} onClick={handleAvatarClick}>
-            <div className={styles.user_pop_up_wrapper} style={userMenu}>
+          <UserBox onClick={handleAvatarClick}>
+            <UserPopUpWrapper className={popUp ? '' : 'invisible collapsed'}>
               {isLoggedIn && user && (
                 <>
-                  <div className={styles.user_item} onClick={logout}>
+                  <UserItem onClick={logout}>
                     <div>
                       <UserOutlined />
                     </div>
                     <div>Logout</div>
-                  </div>
-                  <div
-                    className={styles.user_item}
-                    onClick={() => navigate('/dashboard')}
-                  >
+                  </UserItem>
+                  <UserItem onClick={() => navigate('/dashboard')}>
                     <div>
                       <ApartmentOutlined />
                     </div>
                     <div>Dashboard</div>
-                  </div>
+                  </UserItem>
                 </>
               )}
               {!isLoggedIn && (
                 <>
-                  <div
-                    className={styles.user_item}
-                    onClick={() => navigate('/login')}
-                  >
+                  <UserItem onClick={() => navigate('/login')}>
                     <div>
                       <UserOutlined />
                     </div>
                     <div>Login</div>
-                  </div>
-                  <div
-                    className={styles.user_item}
-                    onClick={() => navigate('/Signup')}
-                  >
+                  </UserItem>
+                  <UserItem onClick={() => navigate('/Signup')}>
                     <div>
                       <UserAddOutlined />
                     </div>
                     <div>Signup</div>
-                  </div>
+                  </UserItem>
                 </>
               )}
-            </div>
-            <Avatar icon={<UserOutlined />} className={styles.user_avatar} />
-            <Text ellipsis={true} className={styles.user_text}>
-              {user ? user : 'unknown'}
-            </Text>
-            <Button
-              className={styles.user_button}
-              icon={<UpOutlined />}
-            ></Button>
-          </div>
+            </UserPopUpWrapper>
+            <UserAvatar icon={<UserOutlined />} />
+            <UserText ellipsis={true}>{user ? user : 'unknown'}</UserText>
+            <UserButton icon={<UpOutlined />}></UserButton>
+          </UserBox>
         </div>
       </NavWrapper>
     </header>
   );
 };
+
+const UserAvatar = styled(Avatar)`
+  margin: 10px 10px 10px 20px;
+  align-self: center;
+`;
+
+const UserText = styled(Text)`
+  vertical-align: middle;
+  color: #fff;
+  align-self: center;
+`;
+
+const UserButton = styled(Button)`
+  background: none;
+  color: #fff;
+  border: none;
+  align-self: center;
+`;
+
+const UserItem = styled.div`
+  align-self: center;
+  justify-self: stretch;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.2s ease-in;
+  height: 3.31rem;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+  > div {
+    align-self: center;
+    align-items: center;
+    font-size: 0.9em;
+    color: #fff;
+  }
+`;
+
+const UserBox = styled.div`
+  display: inline-grid;
+  grid-template-columns: [first] 52px [second] 2fr [third] 1fr;
+  column-gap: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  width: 200px;
+  user-select: none;
+  cursor: pointer;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+`;
+
+const UserPopUp: FC<DivWrapper> = ({ callback, children, ...rest }) => {
+  return <div {...rest}>{children}</div>;
+};
+const UserPopUpWrapper = styled(UserPopUp)`
+  position: absolute;
+  bottom: 53px;
+  width: 200px;
+  grid-template-columns: 1fr 1fr;
+  color: #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  display: inline-grid;
+  transition: opacity 0.2s ease-in;
+  &.collapsed {
+    opacity: 0;
+  }
+  &:nth-child(odd) .user_item {
+    border-right: 1px solid rgba(255, 255, 255, 0.09);
+  }
+`;
 
 const NavWrapper = styled.div`
   // border-radius: 0px;

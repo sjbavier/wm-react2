@@ -1,6 +1,6 @@
 import { FC, useState, useContext } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
-import { Form, Button, Alert } from 'antd';
+import { Form, Alert } from 'antd';
 import { AuthContext } from '../auth/AuthContext';
 import { IAuth } from '../auth/useAuth';
 
@@ -93,7 +93,7 @@ const LoginForm: FC = () => {
               />
             </div>
             <div className={styles.logo_item}>
-              <h1>Webmane Login</h1>
+              <h1>Login</h1>
             </div>
           </div>
           <Form onFinish={(values: TFValues) => formSubmit(values)}>
@@ -134,12 +134,13 @@ const LoginForm: FC = () => {
                 onChange={onPasswordChange}
               />
             </Form.Item>
-            <Form.Item label="" wrapperCol={{ offset: 6 }}>
+            <Form.Item label="">
               <NeuButton
                 type="primary"
                 htmlType="submit"
                 loading={loading}
                 disabled={loading}
+                className="w-full"
               >
                 Login
               </NeuButton>
