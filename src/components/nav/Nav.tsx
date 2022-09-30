@@ -32,7 +32,6 @@ const Nav: FC = () => {
 
   const handleAvatarClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.preventDefault();
-    console.log(popUp);
     setPopUp(!popUp);
   };
 

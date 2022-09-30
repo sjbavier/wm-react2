@@ -1,18 +1,17 @@
 import { FC, useState, useContext } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import { Form, Alert } from 'antd';
-import { AuthContext } from '../auth/AuthContext';
-import { IAuth } from '../auth/useAuth';
+import { AuthContext } from '../../components/auth/AuthContext';
+import { IAuth } from '../../components/auth/useAuth';
 
 import webmaneLogo from '../../img/LionHeadLOGO.svg';
 
-import styles from './Login.module.scss';
 import { PERMISSION } from '../../lib/Permissions';
 import useClient from '../../hooks/useClient';
 import { TRequest } from '../../models/models';
 import styled from 'styled-components';
-import { NeuInput } from '../form/input/NeuInput';
-import { NeuButton } from '../button/NeuButton';
+import { NeuInput } from '../../components/form/input/NeuInput';
+import { NeuButton } from '../../components/button/NeuButton';
 
 type TLoginResponse = {
   userId: number;
@@ -82,17 +81,17 @@ const LoginForm: FC = () => {
     );
   } else {
     return (
-      <div className={styles.flex}>
+      <div className="flex flex-col flex-nowrap justify-center items-center h-screen">
         <LoginContainer>
-          <div className={styles.logo_wrapper}>
-            <div className={styles.logo_item}>
+          <div className="flex justify-center items-center flex-col select-none min-w-[15.625rem]">
+            <div>
               <img
-                className={styles.logo}
+                className="max-w-[100px] w-full pb-8"
                 src={webmaneLogo}
                 alt="webmane logo"
               />
             </div>
-            <div className={styles.logo_item}>
+            <div className="pb-8">
               <h1>Login</h1>
             </div>
           </div>

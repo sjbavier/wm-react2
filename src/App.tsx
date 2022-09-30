@@ -1,11 +1,11 @@
 import { FC, useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Nav from './components/nav/Nav';
-import LoginForm from './components/login/LoginForm';
-import SignupForm from './components/signup/SignupForm';
+import LoginForm from './views/login/LoginForm';
+import SignupForm from './views/signup/SignupForm';
 import PrivateRoute from './components/auth/PrivateRoute';
-import Bookmarks from './components/bookmarks/Bookmarks';
-import { ReferenceNav } from './components/reference/ReferenceNav';
+import Bookmarks from './views/bookmarks/Bookmarks';
+import { ReferenceNav } from './views/reference/ReferenceNav';
 import { Spin } from 'antd';
 
 import { AuthContext } from './components/auth/AuthContext';
