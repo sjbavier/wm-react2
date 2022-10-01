@@ -1,6 +1,7 @@
 import { Form, Input } from 'antd';
 import { debounce } from 'lodash';
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { NeuInput } from '../../../components/form/input/NeuInput';
 import useClient from '../../../hooks/useClient';
 import { VERBOSITY } from '../../../lib/constants';
 import { IBookmarks, TRequest } from '../../../models/models';
@@ -58,7 +59,7 @@ function Search({
       style={{ marginTop: '2rem' }}
     >
       <Form.Item name="search" hasFeedback>
-        <Input
+        <NeuInput
           placeholder="search"
           type="text"
           value={search}

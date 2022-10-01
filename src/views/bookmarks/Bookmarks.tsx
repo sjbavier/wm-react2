@@ -6,6 +6,7 @@ import useClient from '../../hooks/useClient';
 import { VERBOSITY } from '../../lib/constants';
 import { IBookmarks, ICategory, TRequest } from '../../models/models';
 import Search from './search/search';
+import styled from 'styled-components';
 
 const Bookmarks: FC = () => {
   interface IResult {
@@ -106,24 +107,35 @@ const Bookmarks: FC = () => {
           />
         </Col>
       </Row>
-      <div>
-        <Table
-          className="bookmarks"
-          loading={isLoading}
-          columns={columns}
-          dataSource={bookmarks}
-          scroll={{ x: true }}
-          pagination={{
-            pageSize: pageSize ? parseInt(pageSize) : undefined,
-            total: totalBookmarks,
-            onChange: (page, pageSize) => {
-              navigate(`/dashboard/page/${page}/page_size/${pageSize}`);
-            }
-          }}
-        />
-      </div>
+
+      <NeuTable
+        className="bookmarks"
+        loading={isLoading}
+        columns={columns}
+        dataSource={bookmarks}
+        scroll={{ x: true }}
+        pagination={{
+          pageSize: pageSize ? parseInt(pageSize) : undefined,
+          total: totalBookmarks,
+          onChange: (page, pageSize) => {
+            navigate(`/dashboard/page/${page}/page_size/${pageSize}`);
+          }
+        }}
+      />
     </div>
   );
 };
+
+const NeuTable = styled(Table)`
+  .ant-table {
+    border-radius: 7px;
+    background: linear-gradient(145deg, #181b27, #1d202e);
+    box-shadow: 11px 11px 22px #171a25, -11px -11px 22px #1f2231;
+  }
+
+  .ant-table-thead > tr > th {
+    background: none;
+  }
+`;
 
 export default Bookmarks;

@@ -12,4 +12,15 @@ export const NeuInput = styled(AntInput)`
   &:focus {
     box-shadow: inset 3px 3px 5px #0c0d13, inset -5px -5px 7px #2a2f43 !important;
   }
+  &:-internal-autofill-selected {
+    background-color: -internal-light-dark(#1b1e2b, #1b1e2b) !important;
+    color: -internal-light-dark(
+      rgba(255, 255, 255, 0.85),
+      rgba(255, 255, 255, 0.85)
+    );
+  }
+  &:-webkit-autofill,
+  -webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+  }
 `;
