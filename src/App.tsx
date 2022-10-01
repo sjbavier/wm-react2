@@ -12,7 +12,6 @@ import { AuthContext } from './components/auth/AuthContext';
 import { IAuth } from './components/auth/useAuth';
 import './antd.less';
 import './global.scss';
-import styles from './index.module.scss';
 import './App.css';
 
 import styled from 'styled-components';
@@ -21,7 +20,7 @@ const App: FC = () => {
   const { loading, user = '' } = useContext<IAuth>(AuthContext);
 
   return (
-    <div id="app_wrapper" className={styles.maxHeight}>
+    <div id="app_wrapper" className="h-screen">
       <LayoutWrapper>
         <Nav />
         <div className="h-screen w-full overflow-y-scroll p-8">
@@ -33,7 +32,7 @@ const App: FC = () => {
               path="/dashboard/page/:page/page_size/:pageSize"
               element={
                 <PrivateRoute user={user}>
-                  <div className={styles.card_wrapper}>
+                  <div className="flex flex-wrap flex-row">
                     <Bookmarks />
                   </div>
                 </PrivateRoute>
