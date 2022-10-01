@@ -16,6 +16,7 @@ import webmaneLogo from '../../img/LionHeadLOGO.svg';
 import Text from 'antd/lib/typography/Text';
 import styled from 'styled-components';
 import { DivWrapper } from '../../models/models';
+import { NeuNavButton } from '../button/NeuNavButton';
 
 const Nav: FC = () => {
   const navigate = useNavigate();
@@ -54,32 +55,32 @@ const Nav: FC = () => {
             webmane
           </h1>
           <div className="grow ">
-            <Button
+            <NeuNavButton
               type="primary"
               icon={<HomeOutlined />}
               onClick={() => navigate('')}
               className="mt-5 w-full flex items-center "
             >
               home
-            </Button>
+            </NeuNavButton>
             {isLoggedIn && (
               <>
-                <Button
+                <NeuNavButton
                   type="primary"
                   icon={<DashboardOutlined />}
                   onClick={() => navigate('/dashboard/page/1/page_size/10')}
                   className="w-full flex items-center "
                 >
                   dashboard
-                </Button>{' '}
-                <Button
+                </NeuNavButton>{' '}
+                <NeuNavButton
                   type="primary"
                   icon={<BookOutlined />}
                   onClick={() => navigate('/reference')}
                   className="w-full flex items-center "
                 >
                   reference
-                </Button>
+                </NeuNavButton>
               </>
             )}
           </div>
@@ -94,7 +95,9 @@ const Nav: FC = () => {
                     </div>
                     <div>Logout</div>
                   </UserItem>
-                  <UserItem onClick={() => navigate('/dashboard')}>
+                  <UserItem
+                    onClick={() => navigate('/dashboard/page/1/page_size/10')}
+                  >
                     <div>
                       <ApartmentOutlined />
                     </div>

@@ -12,6 +12,8 @@ import { TRequest } from '../../models/models';
 import styled from 'styled-components';
 import { NeuInput } from '../../components/form/input/NeuInput';
 import { NeuButton } from '../../components/button/NeuButton';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { NeuPasswordInput } from '../../components/form/input/NeuPasswordInput';
 
 type TLoginResponse = {
   userId: number;
@@ -126,11 +128,14 @@ const LoginForm: FC = () => {
               ]}
               hasFeedback
             >
-              <NeuInput
+              <NeuPasswordInput
                 placeholder="password"
                 type="password"
                 value={password}
                 onChange={onPasswordChange}
+                iconRender={(visible) =>
+                  visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                }
               />
             </Form.Item>
             <Form.Item label="">

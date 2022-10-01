@@ -8,6 +8,7 @@ import webmaneLogo from '../../img/LionHeadLOGO.svg';
 import styled from 'styled-components';
 import { NeuButton } from '../../components/button/NeuButton';
 import { NeuInput } from '../../components/form/input/NeuInput';
+import { NeuPasswordInput } from '../../components/form/input/NeuPasswordInput';
 
 type TValues = {
   email: string;
@@ -112,7 +113,7 @@ const SignupForm: FC = () => {
             ]}
             hasFeedback
           >
-            <NeuInput placeholder="password" type="password" />
+            <NeuPasswordInput placeholder="password" type="password" />
           </Form.Item>
           <Form.Item
             name="confirmPassword"
@@ -136,7 +137,7 @@ const SignupForm: FC = () => {
             ]}
             hasFeedback
           >
-            <NeuInput placeholder="confirm password" type="password" />
+            <NeuPasswordInput placeholder="confirm password" type="password" />
           </Form.Item>
 
           <Form.Item>

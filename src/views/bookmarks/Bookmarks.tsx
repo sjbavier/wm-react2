@@ -136,6 +136,13 @@ const NeuTable = styled(Table)`
   .ant-table-thead > tr > th {
     background: none;
   }
+  .ant-pagination {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 7px;
+    background: linear-gradient(145deg, #181b27, #1d202e);
+    box-shadow: 11px 11px 22px #171a25, -11px -11px 22px #1f2231;
+  }
 `;
 
 export default Bookmarks;
