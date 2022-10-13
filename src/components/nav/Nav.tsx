@@ -178,6 +178,10 @@ const UserBox = styled.div`
   border-top: 1px solid rgba(255, 255, 255, 0.09);
   width: 200px;
   user-select: none;
+  border-radius: 0px;
+  border: transparent;
+  background: linear-gradient(145deg, #1d202e, #181b27);
+  box-shadow: 3px 3px 7px #0b0c11, -3px -3px 9px #2b3045;
   cursor: pointer;
   &:hover {
     background-color: rgba(255, 255, 255, 0.03);
@@ -196,6 +200,7 @@ const UserPopUpWrapper = styled(UserPopUp)`
   border-top: 1px solid rgba(255, 255, 255, 0.09);
   display: inline-grid;
   transition: opacity 0.2s ease-in;
+
   &.collapsed {
     opacity: 0;
   }
