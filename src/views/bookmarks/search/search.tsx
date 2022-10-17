@@ -1,17 +1,11 @@
-import { Form, Input } from 'antd';
+import { Form } from 'antd';
 import { debounce } from 'lodash';
-import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { NeuInput } from '../../../components/form/input/NeuInput';
 import useClient from '../../../hooks/useClient';
 import { VERBOSITY } from '../../../lib/constants';
-import { IBookmarks, TRequest } from '../../../models/models';
-
-interface IBookmarksProps {
-  bookmarks: IBookmarks[] | [];
-  setBookmarks: Dispatch<SetStateAction<IBookmarks[] | []>>;
-  getBookmarks: (request: TRequest) => Promise<void>;
-  getParameters: TRequest;
-}
+import { TRequest } from '../../../models/models';
+import { IBookmarksProps, IResponse } from './models';
 
 function Search({
   setBookmarks,
@@ -20,10 +14,6 @@ function Search({
 }: IBookmarksProps) {
   const [search, setSearch] = useState('');
   const { fetchMe, loading: isLoading } = useClient(VERBOSITY.NORMAL);
-
-  interface IResponse {
-    data: IBookmarks[];
-  }
 
   const debouncedSearch = useRef(
     debounce(async (request: TRequest) => {

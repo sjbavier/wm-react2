@@ -22,3 +22,17 @@ export interface ICategory {
 export interface DivWrapper extends React.HTMLAttributes<HTMLDivElement> {
   callback?: Function;
 }
+
+export type TResponseReferenceStructure = {
+  hash: string;
+  path: string;
+  reference_structure_id: number;
+  structure?: string;
+};
+
+export type TStructure = {
+  children?: TStructure[];
+  name: string;
+  path: string;
+  type: 'directory' | 'file';
+};
