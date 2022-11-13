@@ -8,7 +8,8 @@ import {
   HomeOutlined,
   UpOutlined,
   DashboardOutlined,
-  BookOutlined
+  BookOutlined,
+  MenuOutlined
 } from '@ant-design/icons';
 import { AuthContext } from '../auth/AuthContext';
 import webmaneLogo from '../../img/LionHeadLOGO.svg';
@@ -17,6 +18,8 @@ import Text from 'antd/lib/typography/Text';
 import styled from 'styled-components';
 import { DivWrapper } from '../../models/models';
 import { NeuNavButton } from '../button/NeuNavButton';
+import { NeuButton } from '../button/NeuButton';
+import classNames from 'classnames';
 
 const Nav: FC = () => {
   const navigate = useNavigate();
@@ -38,7 +41,7 @@ const Nav: FC = () => {
 
   return (
     <header>
-      <NavWrapper className="flex h-screen flex-col flex-wrap ">
+      <NavWrapper className="flex h-screen flex-col flex-wrap w-[200px]">
         <div className="flex flex-col h-full">
           <div
             className="flex justify-center items-center cursor-pointer"
@@ -55,6 +58,7 @@ const Nav: FC = () => {
             webmane
           </h1>
           <div className="grow ">
+            <NeuButton icon={<MenuOutlined />}>Menu</NeuButton>
             <NeuNavButton
               type="primary"
               icon={<HomeOutlined />}
@@ -86,7 +90,12 @@ const Nav: FC = () => {
           </div>
 
           <UserBox onClick={handleAvatarClick}>
-            <UserPopUpWrapper className={popUp ? '' : 'invisible collapsed'}>
+            <UserPopUpWrapper
+              className={classNames(
+                'w-[200px]',
+                popUp ? '' : 'invisible collapsed'
+              )}
+            >
               {isLoggedIn && user && (
                 <>
                   <UserItem onClick={logout}>
@@ -151,6 +160,7 @@ const UserButton = styled(Button)`
 `;
 
 const UserItem = styled.div`
+  min-width: 50%;
   align-self: center;
   justify-self: stretch;
   align-items: center;
@@ -172,11 +182,9 @@ const UserItem = styled.div`
 `;
 
 const UserBox = styled.div`
-  display: inline-grid;
-  grid-template-columns: [first] 52px [second] 2fr [third] 1fr;
-  column-gap: 10px;
+  display: inline-flex;
+  justify-content: space-between;
   border-top: 1px solid rgba(255, 255, 255, 0.09);
-  width: 200px;
   user-select: none;
   border-radius: 0px;
   border: transparent;
@@ -194,11 +202,10 @@ const UserPopUp: FC<DivWrapper> = ({ callback, children, ...rest }) => {
 const UserPopUpWrapper = styled(UserPopUp)`
   position: absolute;
   bottom: 53px;
-  width: 200px;
-  grid-template-columns: 1fr 1fr;
   color: #fff;
   border-top: 1px solid rgba(255, 255, 255, 0.09);
-  display: inline-grid;
+  display: inline-flex;
+  align-items: center;
   transition: opacity 0.2s ease-in;
 
   &.collapsed {

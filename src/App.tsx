@@ -38,7 +38,14 @@ const App: FC = () => {
                 </PrivateRoute>
               }
             />
-            <Route path="/reference" element={<Reference />} />
+            <Route
+              path="/reference"
+              element={
+                <PrivateRoute user={user}>
+                  <Reference />
+                </PrivateRoute>
+              }
+            />
             <Route path="*" element={<div>404 nothing here</div>} />
           </Routes>
           {loading && <Spin />}
