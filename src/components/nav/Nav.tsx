@@ -8,8 +8,7 @@ import {
   HomeOutlined,
   UpOutlined,
   DashboardOutlined,
-  BookOutlined,
-  MenuOutlined
+  BookOutlined
 } from '@ant-design/icons';
 import { AuthContext } from '../auth/AuthContext';
 import webmaneLogo from '../../img/LionHeadLOGO.svg';
@@ -21,7 +20,12 @@ import { NeuNavButton } from '../button/NeuNavButton';
 import { NeuButton } from '../button/NeuButton';
 import classNames from 'classnames';
 
-const Nav: FC = () => {
+interface NavProps {
+  isOpen: boolean | (() => void);
+  toggleIsOpen: boolean | (() => void);
+}
+
+const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
   const navigate = useNavigate();
   const { isLoggedIn, setIsLoggedIn, setToken, user, setUser } =
     useContext(AuthContext);
@@ -39,9 +43,44 @@ const Nav: FC = () => {
     setPopUp(!popUp);
   };
 
+  const hamburgLine =
+    'h-0.5 w-6 my-1 rounded-full bg-white transition ease transform duration-200';
+
   return (
     <header>
-      <NavWrapper className="flex h-screen flex-col flex-wrap w-[200px]">
+      <NeuButton
+        onClick={toggleIsOpen}
+        className="fixed top-2 left-1 z-10 flex flex-col h-12 w-12 justify-center items-center group"
+      >
+        <div
+          className={classNames(
+            hamburgLine,
+            isOpen
+              ? 'rotate-45 translate-y-[10px] opacity-50 group-hover:opacity-100'
+              : 'opacity-50 group-hover:opacity-100'
+          )}
+        ></div>
+        <div
+          className={classNames(
+            hamburgLine,
+            isOpen ? 'opacity-0' : 'opacity-50 group-hover:opacity-100'
+          )}
+        ></div>
+        <div
+          className={classNames(
+            hamburgLine,
+            isOpen
+              ? '-rotate-45 -translate-y-[10px] opacity-50 group-hover:opacity-100'
+              : 'opacity-50 group-hover:opacity-100'
+          )}
+        ></div>
+      </NeuButton>
+      <NavWrapper
+        className={classNames(
+          'flex h-screen flex-col flex-wrap transition-all duration-150 ease-out fixed w-[220px]',
+          isOpen ? 'ml-0' : '-ml-[250px]'
+        )}
+      >
         <div className="flex flex-col h-full">
           <div
             className="flex justify-center items-center cursor-pointer"
@@ -58,7 +97,6 @@ const Nav: FC = () => {
             webmane
           </h1>
           <div className="grow ">
-            <NeuButton icon={<MenuOutlined />}>Menu</NeuButton>
             <NeuNavButton
               type="primary"
               icon={<HomeOutlined />}
@@ -216,10 +254,6 @@ const UserPopUpWrapper = styled(UserPopUp)`
   }
 `;
 
-const NavWrapper = styled.div`
-  // border-radius: 0px;
-  // background: linear-gradient(145deg, #181b27, #1d202e);
-  // box-shadow: 5px 5px 10px #151721, -5px -5px 10px #212535;
-`;
+const NavWrapper = styled.div``;
 
 export default Nav;

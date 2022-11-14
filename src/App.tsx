@@ -15,15 +15,23 @@ import './global.scss';
 import './App.css';
 
 import styled from 'styled-components';
+import { useToggle } from './hooks/useToggle';
+import classNames from 'classnames';
 
 const App: FC = () => {
   const { loading, user = '' } = useContext<IAuth>(AuthContext);
+  const [isOpen, toggleIsOpen] = useToggle(true);
 
   return (
     <div id="app_wrapper" className="h-screen">
       <LayoutWrapper>
-        <Nav />
-        <div className="h-screen w-full overflow-y-scroll p-8">
+        <Nav toggleIsOpen={toggleIsOpen} isOpen={isOpen} />
+        <div
+          className={classNames(
+            'transition-all duration-150 ease-out h-screen w-full overflow-y-scroll pl-16 pr-16 pt-8 pb-8',
+            isOpen ? 'ml-[220px]' : 'ml-0'
+          )}
+        >
           <Routes>
             <Route path="/" element={<div>Home</div>} />
             <Route path="/login" element={<LoginForm />} />
