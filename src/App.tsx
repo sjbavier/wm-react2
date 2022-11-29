@@ -23,12 +23,12 @@ const App: FC = () => {
   const [isOpen, toggleIsOpen] = useToggle(true);
 
   return (
-    <div id="app_wrapper" className="h-screen">
+    <div id="app_wrapper" className="h-screen overflow-hidden">
       <LayoutWrapper>
         <Nav toggleIsOpen={toggleIsOpen} isOpen={isOpen} />
         <div
           className={classNames(
-            'transition-all duration-150 ease-out h-screen w-full overflow-y-scroll pl-16 pr-16 pt-8 pb-8',
+            'transition-all duration-150 h-screen w-full pl-16',
             isOpen ? 'ml-[220px]' : 'ml-0'
           )}
         >

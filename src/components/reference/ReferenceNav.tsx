@@ -1,10 +1,14 @@
 import { DownOutlined } from '@ant-design/icons';
 import Tree, { DataNode, TreeProps } from 'antd/lib/tree';
 import { useEffect, useState } from 'react';
-import { TStructure } from '../../models/models';
-import { IReferenceNavProps } from './models';
+import { TRequest, TStructure } from '../../models/models';
+import { IReferenceData, IReferenceNavProps } from './models';
 
-export const ReferenceNav = ({ codified }: IReferenceNavProps) => {
+export const ReferenceNav = ({
+  fetchMarkdown,
+  codified,
+  setMarkdownContent
+}: IReferenceNavProps) => {
   const [nav, setNav] = useState<DataNode[]>([{ key: '' }]);
 
   useEffect(() => {
@@ -54,18 +58,29 @@ export const ReferenceNav = ({ codified }: IReferenceNavProps) => {
     };
   }, [codified]);
 
-  const onSelect: TreeProps['onSelect'] = (selectedKeys, info) => {
-    console.log('selected', selectedKeys, info);
+  const onSelect: TreeProps['onSelect'] = async (selectedKeys, info) => {
+    const pathname = info.node.key.toString();
+    const request: TRequest = {
+      method: 'GET',
+      path: `/api/reference/path?name=${pathname}`
+    };
+    const extension = pathname.match(/\.[0-9a-z]+$/i);
+    if (extension) {
+      const data: IReferenceData = await fetchMarkdown(request);
+      data.data.content
+        ? setMarkdownContent(data?.data?.content)
+        : setMarkdownContent(null);
+    }
   };
 
   return (
-    <>
+    <div className="overflow-y-auto min-w-fit h-screen pt-8 pb-8">
       <Tree
         showLine
         switcherIcon={<DownOutlined />}
         onSelect={onSelect}
         treeData={nav}
       />
-    </>
+    </div>
   );
 };

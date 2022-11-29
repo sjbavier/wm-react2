@@ -44,13 +44,16 @@ const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
   };
 
   const hamburgLine =
-    'h-0.5 w-6 my-1 rounded-full bg-white transition ease transform duration-200';
+    'h-0.5 w-6 my-1 rounded-full bg-white transition-all duration-150 delay-200';
 
   return (
     <header>
       <NeuButton
         onClick={toggleIsOpen}
-        className="fixed top-2 left-1 z-10 flex flex-col h-12 w-12 justify-center items-center group"
+        className={classNames(
+          'fixed top-7 z-10 flex flex-col h-12 w-12 justify-center items-center group transition-all duration-150',
+          isOpen ? 'left-[172px]' : 'left-1'
+        )}
       >
         <div
           className={classNames(
@@ -77,8 +80,8 @@ const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
       </NeuButton>
       <NavWrapper
         className={classNames(
-          'flex h-screen flex-col flex-wrap transition-all duration-150 ease-out fixed w-[220px]',
-          isOpen ? 'ml-0' : '-ml-[250px]'
+          'flex h-screen flex-col flex-wrap transition-all duration-150 fixed w-[220px]',
+          isOpen ? 'ml-0' : '-ml-[230px]'
         )}
       >
         <div className="flex flex-col h-full">
@@ -130,7 +133,7 @@ const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
           <UserBox onClick={handleAvatarClick}>
             <UserPopUpWrapper
               className={classNames(
-                'w-[200px]',
+                'w-[220px]',
                 popUp ? '' : 'invisible collapsed'
               )}
             >
@@ -222,7 +225,7 @@ const UserItem = styled.div`
 const UserBox = styled.div`
   display: inline-flex;
   justify-content: space-between;
-  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  border-top: 1px solid #3d4461;
   user-select: none;
   border-radius: 0px;
   border: transparent;
@@ -241,7 +244,7 @@ const UserPopUpWrapper = styled(UserPopUp)`
   position: absolute;
   bottom: 53px;
   color: #fff;
-  border-top: 1px solid rgba(255, 255, 255, 0.09);
+  border-top: 1px solid #3d4461;
   display: inline-flex;
   align-items: center;
   transition: opacity 0.2s ease-in;

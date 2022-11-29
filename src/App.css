@@ -1,3 +1,61 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  h1 {
+    @apply font-medium leading-tight text-2xl mt-5 mb-4;
+  }
+  h2 {
+    @apply font-medium leading-tight text-xl mt-4 mb-3.5;
+  }
+  h3 {
+    @apply font-medium leading-tight text-xl mt-4 mb-3;
+  }
+  h4 {
+    @apply font-medium leading-tight text-xl mt-3 mb-2;
+  }
+  h5 {
+    @apply font-medium leading-tight text-xl mt-3 mb-2;
+  }
+  h6 {
+    @apply font-medium leading-tight text-base mt-3 mb-2;
+  }
+  p {
+    @apply mt-3 mb-2;
+  }
+  ul {
+    @apply space-y-4 list-disc list-inside mb-6;
+  }
+  table {
+    @apply text-sm text-left;
+  }
+  thead {
+    @apply text-xs uppercase;
+  }
+  th {
+    @apply py-3 px-6;
+  }
+  tr {
+    @apply border-b border-w_dk_blue-400;
+  }
+  td {
+    @apply py-4 px-6;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(229deg 24% 10%);
+  }
+  *::-webkit-scrollbar {
+    width: 0.8rem;
+  }
+  *::-webkit-scrollbar-track {
+    background: hsl(229deg 24% 10%);
+  }
+  *::-webkit-scrollbar-thumb {
+    background: hsl(231deg 21% 17%);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: hsl(231deg 18% 20%);
+  }
+}

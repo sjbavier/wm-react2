@@ -95,7 +95,7 @@ const Bookmarks: FC = () => {
   }, [getBookmarks, getParameters]);
 
   return (
-    <div className="mt-3">
+    <div className="p-8">
       <h1>bookmarks</h1>
       <Row>
         <Col span={16}>
@@ -142,6 +142,9 @@ const NeuTable = styled(Table)`
     border-radius: 7px;
     background: linear-gradient(145deg, #181b27, #1d202e);
     box-shadow: 11px 11px 22px #171a25, -11px -11px 22px #1f2231;
+  }
+  .ant-table-tbody > tr.ant-table-row:hover > td {
+    background: hsl(228deg 23% 31% / 38%);
   }
 `;
 
