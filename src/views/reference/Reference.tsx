@@ -14,8 +14,8 @@ export const Reference: FC = () => {
   const { data, loading } = useReferenceStructure();
   const {
     fetchMe: fetchMarkdown,
-    loading: loadingMarkdown,
-    error: errorMarkdown
+    loading: loadingMarkdown
+    // error: errorMarkdown
   } = useClient(VERBOSITY.SILENT);
 
   const [markdownContent, setMarkdownContent] = useState<string | null>(null);
@@ -59,7 +59,7 @@ export const Reference: FC = () => {
         </div>
       )}
       {markdownContent && !loadingMarkdown && (
-        <div className="h-screen overflow-y-auto flex-1 p-8">
+        <div className="h-screen overflow-auto p-8 flex-1">
           <ReactMarkdown
             children={markdownContent}
             remarkPlugins={[remarkGfm]}

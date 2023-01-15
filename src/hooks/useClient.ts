@@ -1,8 +1,7 @@
 import { useCallback, useContext, useState } from 'react';
 import { AuthContext } from '../components/auth/AuthContext';
-import { VERBOSITY } from '../lib/constants';
 import { TRequest } from '../models/models';
-import useNotifications from './useNotifications';
+import { useHandleNotifications } from './useNotifications';
 
 // const apiErrors = {
 //     401: 'Unauthorized',
@@ -13,17 +12,13 @@ import useNotifications from './useNotifications';
 //     500: 'Server error'
 // }
 
-export const prettyError = (err: Error): string => {
-  return err.toString().replace('Error:', '');
-};
-
 export default function useClient(verbosity?: string) {
   const [error, setError] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { token, setToken } = useContext(AuthContext);
-  const setNotification = useNotifications();
+  const { handleResponse } = useHandleNotifications();
 
   const fetchMe = useCallback(
     async <T>(request: TRequest): Promise<T> => {
@@ -41,71 +36,25 @@ export default function useClient(verbosity?: string) {
         body: JSON.stringify(request.data) || undefined
       };
 
-      return fetch(`${request.path}`, reqOptions)
-        .then((response) => {
-          if (!response.ok) {
-            //   Error Notifications
-            setError(true);
-            setLoading(false);
-            if (response.status === 401) setToken('');
-            switch (verbosity) {
-              case VERBOSITY.SILENT:
-                break;
-              case VERBOSITY.NORMAL:
-                setNotification({
-                  message: `Error: ${response.status}`,
-                  description: response.statusText.toString()
-                });
-                break;
-              case VERBOSITY.VERBOSE:
-                setNotification({
-                  message: `Error: ${response.status} ${response.statusText}`,
-                  description: response.statusText.toString(),
-                  duration: 10
-                });
-                break;
-              default:
-                setNotification({
-                  message: `Error: ${response.status}`,
-                  description: response.statusText.toString()
-                });
-            }
-            return response.json() as Promise<T>;
-          }
+      return fetch(`${request.path}`, reqOptions).then((response) => {
+        if (!response.ok) {
+          //   Error Notifications
+          setError(true);
+          setLoading(false);
+          if (response.status === 401) setToken('');
+          handleResponse({ response, verbosity });
+          return response.json() as Promise<T>;
+        } else {
           setSuccess(true);
           setLoading(false);
-          // Success Notifications
-          switch (verbosity) {
-            case VERBOSITY.SILENT:
-              break;
-            case VERBOSITY.NORMAL:
-              setNotification({
-                message: `Success: ${response.statusText}`
-              });
-              break;
-            case VERBOSITY.VERBOSE:
-              setNotification({
-                message: `Success: ${response.status} ${response.statusText}`,
-                duration: 10
-              });
-              break;
-            default:
-              setNotification({
-                message: `Success: ${response.statusText}`
-              });
-          }
+          // success notifications
+          handleResponse({ response, verbosity });
+
           return response.json() as Promise<T>;
-        })
-        .catch((e) => {
-          setError(true);
-          setNotification({
-            message: `Error: ${e}`
-          });
-          setLoading(false);
-          return e as Promise<T>;
-        });
+        }
+      });
     },
-    [token, setNotification, verbosity, setToken]
+    [token, verbosity, setToken, handleResponse]
   );
 
   return {

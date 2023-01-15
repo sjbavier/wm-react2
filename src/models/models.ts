@@ -85,5 +85,5 @@ export type TStructure = {
   children?: TStructure[];
   name: string;
   path: string;
-  type: 'directory' | 'file';
+  type: 'directory' | 'file' | 'hidden';
 };

@@ -18,10 +18,14 @@ export const ReferenceNav = ({
       const walkNodes = (_children: TStructure[]) => {
         const nodeTree: DataNode[] = [];
 
-        _children.forEach((node) => {
-          const _node = createNode(node);
-          nodeTree.push(_node);
-        });
+        _children
+          .filter((x) => x.type !== 'hidden')
+          .forEach((node) => {
+            const _node = createNode(node);
+            if (_node) {
+              nodeTree.push(_node);
+            }
+          });
 
         return nodeTree;
       };

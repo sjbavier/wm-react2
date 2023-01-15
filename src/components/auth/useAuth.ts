@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import useClient from '../../hooks/useClient';
-import useNotifications from '../../hooks/useNotifications';
+import { useSetNotifications } from '../../hooks/useNotifications';
 import { VERBOSITY } from '../../lib/constants';
 import { PERMISSION } from '../../lib/Permissions';
 import { TRequest } from '../../models/models';
@@ -68,7 +68,7 @@ export const useAuth = () => {
   const [scopes, setScopes] = useState<string[] | undefined>(undefined);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [err, setErr] = useState<TAuthResponse | any>('');
-  const setNotification = useNotifications();
+  const { setNotification } = useSetNotifications();
   const { fetchMe, loading } = useClient(VERBOSITY.NORMAL);
 
   const fetchUser = useCallback(async () => {
