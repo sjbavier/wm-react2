@@ -2,7 +2,7 @@ import { FC, useState, useContext } from 'react';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import { Form, Alert } from 'antd';
 import { AuthContext } from '../../components/auth/AuthContext';
-import { IAuth } from '../../components/auth/useAuth';
+import { AUTH_ACTION, IAuthContext } from '../../components/auth/useAuth';
 
 import webmaneLogo from '../../img/LionHeadLOGO.svg';
 
@@ -33,8 +33,8 @@ const LoginForm: FC = () => {
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
   const [err, setErr] = useState('');
-  const { setToken, setIsLoggedIn, setScopes, setUser, setUserId, token } =
-    useContext<IAuth>(AuthContext);
+  const { dispatchAuth, token, setToken } =
+    useContext<IAuthContext>(AuthContext);
   const [redirectTo] = useSearchParams();
   const { fetchMe, loading } = useClient();
 
@@ -49,6 +49,7 @@ const LoginForm: FC = () => {
   const formSubmit = async (values: TFValues) => {
     setErr('');
     setMsg('');
+    setMsg('Submitting');
     let formData = {
       email: values.email,
       password: values.password
@@ -59,18 +60,20 @@ const LoginForm: FC = () => {
       data: formData
     };
     if (!loading) {
-      setMsg('Submitting');
-
       const response: TLoginResponse = await fetchMe(request);
       if (response?.access_token) {
-        setToken(response.access_token);
-        setScopes(PERMISSION[response?.role.toUpperCase()]);
-        setUser(response.user);
-        setUserId(response.userId);
-        setIsLoggedIn(true);
+        setMsg('');
+        setToken(response?.access_token);
+        dispatchAuth({
+          type: AUTH_ACTION.LOGIN,
+          payload: {
+            user: response.user,
+            userId: response.userId.toString(),
+            scopes: PERMISSION[response.role.toUpperCase()],
+            token: response.access_token
+          }
+        });
       }
-
-      setMsg('');
     }
   };
 

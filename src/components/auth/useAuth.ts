@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useReducer, useMemo, useEffect } from 'react';
 import useClient from '../../hooks/useClient';
 import { useSetNotifications } from '../../hooks/useNotifications';
 import { VERBOSITY } from '../../lib/constants';
@@ -13,87 +13,137 @@ export type TAuthResponse = {
   msg?: string;
 };
 
-export interface IAuth {
-  err?: string;
-  loading: boolean;
-  isLoggedIn: boolean;
-  setIsLoggedIn: any;
-  userId?: number;
-  setUserId: any;
+export interface IAuthState {
+  userId?: string;
   user?: string;
-  setUser: any;
   scopes?: string[];
-  setScopes: any;
   token?: string;
-  setToken: any;
+  error?: string;
+  loading?: boolean;
+}
+
+export interface IAuthAction {
+  type: string;
+  payload?: IAuthState;
+}
+
+export const enum AUTH_ACTION {
+  LOGIN = 'LOGIN',
+  LOGOUT = 'LOGOUT',
+  FETCHING = 'FETCHING',
+  ERROR = 'ERROR'
+}
+
+export interface IAuthContext extends IAuthState {
   fetchUser: any;
-  isComplete: string;
+  dispatchAuth: any;
+  setToken: any;
 }
 
-export enum TOKEN_STATE {
-  IDLE = 'idle',
-  PENDING = 'pending',
-  COMPLETE = 'complete'
-}
+export const initialState: IAuthState = {
+  userId: undefined,
+  user: undefined,
+  scopes: undefined,
+  token: undefined,
+  error: undefined,
+  loading: false
+};
 
-export const useToken = (lToken: string) => {
-  const [token, _setToken] = useState<string>(lToken);
-  const [isComplete, setIsComplete] = useState<TOKEN_STATE>(TOKEN_STATE.IDLE);
+const authReducer = (state: IAuthState, action: IAuthAction) => {
+  switch (action.type) {
+    case AUTH_ACTION.LOGIN:
+      return {
+        error: undefined,
+        loading: false,
+        user: action?.payload?.user,
+        userId: action?.payload?.userId,
+        token: action?.payload?.token,
+        scopes: action?.payload?.scopes
+      };
+    case AUTH_ACTION.LOGOUT:
+      return {
+        error: undefined,
+        loading: false,
+        user: undefined,
+        userId: undefined,
+        token: '',
+        scopes: undefined
+      };
+    case AUTH_ACTION.FETCHING:
+      return {
+        ...state,
+        loading: true,
+        error: undefined
+      };
+    case AUTH_ACTION.ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action?.payload?.error
+      };
+    default:
+      return {
+        ...state
+      };
+  }
+};
 
-  useEffect(() => {
-    if (isComplete === 'pending' && token) {
-      console.log('pending with token', token);
-      setIsComplete(TOKEN_STATE.COMPLETE);
-    }
-    if (isComplete === 'complete' && token) {
-      setIsComplete(TOKEN_STATE.IDLE);
-    }
-  }, [token, isComplete]);
-
-  const setToken = useCallback((Atoken: string) => {
-    setIsComplete(TOKEN_STATE.PENDING);
-    localStorage.setItem('token', Atoken);
-    _setToken(Atoken);
+export const useLocalToken = () => {
+  const getToken = useMemo((): string => {
+    return localStorage.getItem('token')?.toString() || '';
   }, []);
 
-  return [token, setToken, isComplete, setIsComplete] as const; // freeze array to a tuple
+  const setToken = useCallback((token) => {
+    localStorage.setItem('token', token);
+  }, []);
+
+  return [getToken, setToken] as const;
 };
 
 export const useAuth = () => {
-  const [token, setToken, isComplete] = useToken(
-    localStorage.getItem('token') || ''
-  );
-  const [userId, setUserId] = useState<number | undefined>(undefined);
-  const [user, setUser] = useState<string | undefined>(undefined);
-  const [scopes, setScopes] = useState<string[] | undefined>(undefined);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [err, setErr] = useState<TAuthResponse | any>('');
+  const [getToken, setToken] = useLocalToken();
+  const [authState, dispatchAuth] = useReducer(authReducer, initialState);
+  const {
+    user,
+    userId,
+    scopes,
+    token: authToken,
+    loading: authLoading,
+    error: authError
+  } = authState;
   const { setNotification } = useSetNotifications();
-  const { fetchMe, loading } = useClient(VERBOSITY.NORMAL);
+  const { fetchMe } = useClient(VERBOSITY.NORMAL);
+
+  const token = authToken ? authToken : getToken ? getToken : '';
 
   const fetchUser = useCallback(async () => {
     if (!!token) {
-      console.log('fetch user:', token);
       const request: TRequest = {
         method: 'GET',
         path: '/auth/authorize',
         token
       };
+
+      dispatchAuth({ type: AUTH_ACTION.FETCHING });
+
       fetchMe<TAuthResponse>(request)
         .then((response: TAuthResponse) => {
           if (response.user) {
-            setUserId(response.userId);
-            setUser(response.user);
-            setScopes(PERMISSION[response.role.toUpperCase()]);
-            setIsLoggedIn(true);
+            dispatchAuth({
+              type: AUTH_ACTION.LOGIN,
+              payload: {
+                user: response.user,
+                userId: response.userId.toString(),
+                scopes: PERMISSION[response.role.toUpperCase()],
+                token
+              }
+            });
           } else {
-            setUserId(undefined);
-            setUser(undefined);
-            setScopes(undefined);
-            setIsLoggedIn(false);
-
             setToken('');
-            setErr(response.msg);
+            dispatchAuth({
+              type: AUTH_ACTION.LOGOUT
+            });
+
             setNotification({
               message: 'Error',
               description: `${response.msg}`
@@ -101,6 +151,7 @@ export const useAuth = () => {
           }
         })
         .catch((err) => {
+          dispatchAuth({ type: AUTH_ACTION.ERROR });
           setNotification({
             message: 'Error',
             description: `${err}`
@@ -109,21 +160,26 @@ export const useAuth = () => {
     }
   }, [token, setToken, setNotification, fetchMe]);
 
-  const auth: IAuth = {
-    err,
-    loading,
-    isLoggedIn,
-    setIsLoggedIn,
+  useEffect(() => {
+    let mounted = true;
+    if (!!token && !user && mounted) {
+      fetchUser();
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [user, token, fetchUser]);
+
+  const auth: IAuthContext = {
+    dispatchAuth,
     userId,
-    setUserId,
     user,
-    setUser,
     scopes,
-    setScopes,
     token,
-    setToken,
+    error: authError,
+    loading: authLoading,
     fetchUser,
-    isComplete
+    setToken
   };
 
   return auth;

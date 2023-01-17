@@ -1,4 +1,6 @@
 import React from 'react';
-import { IAuth } from './useAuth';
+import { IAuthContext } from './useAuth';
 
-export const AuthContext = React.createContext<IAuth>({} as IAuth)
+export const AuthContext = React.createContext<IAuthContext>(
+  {} as IAuthContext
+);

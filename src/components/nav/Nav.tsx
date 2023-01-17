@@ -19,6 +19,7 @@ import { DivWrapper } from '../../models/models';
 import { NeuNavButton } from '../button/NeuNavButton';
 import { NeuButton } from '../button/NeuButton';
 import classNames from 'classnames';
+import { AUTH_ACTION, IAuthContext } from '../auth/useAuth';
 
 interface NavProps {
   isOpen: boolean | (() => void);
@@ -27,14 +28,11 @@ interface NavProps {
 
 const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
   const navigate = useNavigate();
-  const { isLoggedIn, setIsLoggedIn, setToken, user, setUser } =
-    useContext(AuthContext);
+  const { user, dispatchAuth } = useContext<IAuthContext>(AuthContext);
   const [popUp, setPopUp] = useState<boolean>(false);
 
   const logout = (ev: React.MouseEvent<HTMLDivElement>) => {
-    setToken('');
-    setIsLoggedIn(false);
-    setUser(undefined);
+    dispatchAuth({ type: AUTH_ACTION.LOGOUT });
     navigate('');
   };
 
@@ -108,7 +106,7 @@ const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
             >
               home
             </NeuNavButton>
-            {isLoggedIn && (
+            {!!user && (
               <>
                 <NeuNavButton
                   type="primary"
@@ -137,7 +135,7 @@ const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
                 popUp ? '' : 'invisible collapsed'
               )}
             >
-              {isLoggedIn && user && (
+              {!!user && (
                 <>
                   <UserItem onClick={logout}>
                     <div>
@@ -155,7 +153,7 @@ const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
                   </UserItem>
                 </>
               )}
-              {!isLoggedIn && (
+              {!user && (
                 <>
                   <UserItem onClick={() => navigate('/login')}>
                     <div>
