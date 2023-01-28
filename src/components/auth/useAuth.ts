@@ -108,7 +108,6 @@ export const useAuth = () => {
     };
 
     if (mounted) {
-      console.log('setting local token', token);
       setLocalToken(token || '');
     }
     return () => {

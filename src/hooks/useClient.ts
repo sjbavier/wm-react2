@@ -39,7 +39,6 @@ export default function useClient(verbosity?: string) {
         body: JSON.stringify(request.data) || undefined
       };
 
-      console.log('headers', headers.get('Authorization'));
       return fetch(`${request.path}`, reqOptions).then((response) => {
         if (!response.ok) {
           //   Error Notifications
