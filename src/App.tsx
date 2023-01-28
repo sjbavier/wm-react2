@@ -41,7 +41,7 @@ const App: FC = () => {
                 path="/dashboard/page/:page/page_size/:pageSize"
                 element={
                   <PrivateRoute>
-                    <div className="flex flex-wrap flex-row">
+                    <div className="flex flex-wrap flex-row h-full overflow-y-auto">
                       <Bookmarks />
                     </div>
                   </PrivateRoute>
