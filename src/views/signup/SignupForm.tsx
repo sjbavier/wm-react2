@@ -154,9 +154,9 @@ const SignupForm: FC = () => {
 };
 
 const LoginContainer = styled.div`
-  border-radius: 30px;
+  border-radius: 4px;
   background: #1b1e2b;
-  box-shadow: inset 12px 12px 20px #0f1118, inset -12px -12px 20px #272c3e;
+  box-shadow: inset 6px 6px 14px #0f1118, inset -6px -6px 14px #272c3e;
   padding: 2.5rem;
 `;
 

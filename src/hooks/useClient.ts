@@ -1,6 +1,6 @@
 import { useCallback, useContext, useState } from 'react';
 import { AuthContext } from '../components/auth/AuthContext';
-import { AUTH_ACTION, IAuthContext } from '../components/auth/useAuth';
+import { IAuthContext } from '../components/auth/useAuth';
 import { TRequest } from '../models/models';
 import { useHandleNotifications } from './useNotifications';
 
@@ -17,9 +17,9 @@ export default function useClient(verbosity?: string) {
   const [error, setError] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [statusCode, setStatusCode] = useState<Number>(0);
 
-  const { token, dispatchAuth, setToken } =
-    useContext<IAuthContext>(AuthContext);
+  const { token } = useContext<IAuthContext>(AuthContext);
   const { handleResponse } = useHandleNotifications();
 
   const fetchMe = useCallback(
@@ -29,8 +29,9 @@ export default function useClient(verbosity?: string) {
       var headers = new Headers();
       headers.append('Accept', 'application/json');
       headers.append('Content-Type', 'application/json');
+      let authToken = request?.token ? request.token : token;
 
-      if (token) headers.append('Authorization', `Bearer ${token}`);
+      if (authToken) headers.append('Authorization', `Bearer ${authToken}`);
 
       const reqOptions = {
         method: request.method,
@@ -44,29 +45,27 @@ export default function useClient(verbosity?: string) {
           //   Error Notifications
           setError(true);
           setLoading(false);
-          if (response.status === 401) {
-            setToken('');
-            dispatchAuth({ type: AUTH_ACTION.LOGOUT });
-          }
+          setStatusCode(response.status);
           handleResponse({ response, verbosity });
           return response.json() as Promise<T>;
         } else {
+          // success notifications
           setSuccess(true);
           setLoading(false);
-          // success notifications
           handleResponse({ response, verbosity });
 
           return response.json() as Promise<T>;
         }
       });
     },
-    [token, verbosity, handleResponse, dispatchAuth, setToken]
+    [token, verbosity, handleResponse]
   );
 
   return {
     fetchMe,
     loading,
     error,
-    success
+    success,
+    statusCode
   };
 }

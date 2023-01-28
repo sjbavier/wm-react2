@@ -1,4 +1,4 @@
-import { useCallback, useReducer, useMemo, useEffect } from 'react';
+import { useCallback, useReducer, useEffect } from 'react';
 import useClient from '../../hooks/useClient';
 import { useSetNotifications } from '../../hooks/useNotifications';
 import { VERBOSITY } from '../../lib/constants';
@@ -37,14 +37,13 @@ export const enum AUTH_ACTION {
 export interface IAuthContext extends IAuthState {
   fetchUser: any;
   dispatchAuth: any;
-  setToken: any;
 }
 
 export const initialState: IAuthState = {
   userId: undefined,
   user: undefined,
   scopes: undefined,
-  token: undefined,
+  token: localStorage.getItem('token')?.toString() || '',
   error: undefined,
   loading: false
 };
@@ -88,33 +87,34 @@ const authReducer = (state: IAuthState, action: IAuthAction) => {
   }
 };
 
-export const useLocalToken = () => {
-  const getToken = useMemo((): string => {
-    return localStorage.getItem('token')?.toString() || '';
-  }, []);
-
-  const setToken = useCallback((token) => {
-    localStorage.setItem('token', token);
-  }, []);
-
-  return [getToken, setToken] as const;
-};
-
 export const useAuth = () => {
-  const [getToken, setToken] = useLocalToken();
   const [authState, dispatchAuth] = useReducer(authReducer, initialState);
   const {
     user,
     userId,
     scopes,
-    token: authToken,
+    token,
     loading: authLoading,
     error: authError
   } = authState;
   const { setNotification } = useSetNotifications();
-  const { fetchMe } = useClient(VERBOSITY.NORMAL);
+  const { fetchMe, statusCode } = useClient(VERBOSITY.NORMAL);
 
-  const token = authToken ? authToken : getToken ? getToken : '';
+  // syncs redux token state to localstorage
+  useEffect(() => {
+    let mounted = true;
+    const setLocalToken = (token: string) => {
+      localStorage.setItem('token', token);
+    };
+
+    if (mounted) {
+      console.log('setting local token', token);
+      setLocalToken(token || '');
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [token]);
 
   const fetchUser = useCallback(async () => {
     if (!!token) {
@@ -128,6 +128,9 @@ export const useAuth = () => {
 
       fetchMe<TAuthResponse>(request)
         .then((response: TAuthResponse) => {
+          if (statusCode === 401) {
+            dispatchAuth({ type: AUTH_ACTION.LOGOUT });
+          }
           if (response.user) {
             dispatchAuth({
               type: AUTH_ACTION.LOGIN,
@@ -139,7 +142,6 @@ export const useAuth = () => {
               }
             });
           } else {
-            setToken('');
             dispatchAuth({
               type: AUTH_ACTION.LOGOUT
             });
@@ -158,7 +160,7 @@ export const useAuth = () => {
           });
         });
     }
-  }, [token, setToken, setNotification, fetchMe]);
+  }, [token, setNotification, fetchMe, statusCode]);
 
   useEffect(() => {
     let mounted = true;
@@ -178,8 +180,7 @@ export const useAuth = () => {
     token,
     error: authError,
     loading: authLoading,
-    fetchUser,
-    setToken
+    fetchUser
   };
 
   return auth;

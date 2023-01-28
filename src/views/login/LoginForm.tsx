@@ -33,8 +33,7 @@ const LoginForm: FC = () => {
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState('');
   const [err, setErr] = useState('');
-  const { dispatchAuth, token, setToken } =
-    useContext<IAuthContext>(AuthContext);
+  const { dispatchAuth, token } = useContext<IAuthContext>(AuthContext);
   const [redirectTo] = useSearchParams();
   const { fetchMe, loading } = useClient();
 
@@ -63,14 +62,13 @@ const LoginForm: FC = () => {
       const response: TLoginResponse = await fetchMe(request);
       if (response?.access_token) {
         setMsg('');
-        setToken(response?.access_token);
         dispatchAuth({
           type: AUTH_ACTION.LOGIN,
           payload: {
-            user: response.user,
-            userId: response.userId.toString(),
-            scopes: PERMISSION[response.role.toUpperCase()],
-            token: response.access_token
+            user: response?.user,
+            userId: response?.userId.toString(),
+            scopes: PERMISSION[response?.role.toUpperCase()],
+            token: response?.access_token
           }
         });
       }
@@ -162,9 +160,9 @@ const LoginForm: FC = () => {
 };
 
 const LoginContainer = styled.div`
-  border-radius: 30px;
+  border-radius: 4px;
   background: #1b1e2b;
-  box-shadow: inset 12px 12px 20px #0f1118, inset -12px -12px 20px #272c3e;
+  box-shadow: inset 6px 6px 14px #0f1118, inset -6px -6px 14px #272c3e;
   padding: 2.5rem;
 `;
 
