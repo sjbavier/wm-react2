@@ -58,6 +58,14 @@ export type TRequest = {
   token?: string;
 };
 
+export type TLoginResponse = {
+  userId: number;
+  user: string;
+  role: string;
+  access_token?: string;
+  message: string;
+};
+
 export interface IBookmarks {
   title: string;
   bookmark_id: number;

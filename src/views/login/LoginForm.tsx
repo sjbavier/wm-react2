@@ -8,20 +8,12 @@ import webmaneLogo from '../../img/LionHeadLOGO.svg';
 
 import { PERMISSION } from '../../lib/Permissions';
 import useClient from '../../hooks/useClient';
-import { TRequest } from '../../models/models';
+import { TLoginResponse, TRequest } from '../../models/models';
 import styled from 'styled-components';
 import { NeuInput } from '../../components/form/input/NeuInput';
 import { NeuButton } from '../../components/button/NeuButton';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { NeuPasswordInput } from '../../components/form/input/NeuPasswordInput';
-
-type TLoginResponse = {
-  userId: number;
-  user: string;
-  role: string;
-  access_token?: string;
-  message: string;
-};
 
 type TFValues = {
   email: string;

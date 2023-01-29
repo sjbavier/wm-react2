@@ -1,6 +1,4 @@
-import { FC, useState } from 'react';
-import { fetchMe, prettyError, TRequest } from '../../lib/Client';
-import { useNavigate } from 'react-router-dom';
+import { FC, useContext, useState } from 'react';
 import { Form, Alert } from 'antd';
 
 import webmaneLogo from '../../img/LionHeadLOGO.svg';
@@ -9,6 +7,11 @@ import styled from 'styled-components';
 import { NeuButton } from '../../components/button/NeuButton';
 import { NeuInput } from '../../components/form/input/NeuInput';
 import { NeuPasswordInput } from '../../components/form/input/NeuPasswordInput';
+import useClient from '../../hooks/useClient';
+import { TLoginResponse, TRequest } from '../../models/models';
+import { AUTH_ACTION, IAuthContext } from '../../components/auth/useAuth';
+import { PERMISSION } from '../../lib/Permissions';
+import { AuthContext } from '../../components/auth/AuthContext';
 
 type TValues = {
   email: string;
@@ -19,16 +22,10 @@ type TValues = {
 const SignupForm: FC = () => {
   const [msg, setMsg] = useState('');
   const [err, setErr] = useState('');
-  const [fetching, setFetching] = useState(false);
-  const navigate = useNavigate();
+  const { fetchMe, loading } = useClient();
+  const { dispatchAuth } = useContext<IAuthContext>(AuthContext);
 
-  const clearAll = (): void => {
-    setMsg('');
-    setErr('');
-    setFetching(false);
-  };
-
-  const formSubmit = (values: TValues): void => {
+  const formSubmit = async (values: TValues) => {
     setErr('');
     setMsg('');
     let formData = {
@@ -36,27 +33,28 @@ const SignupForm: FC = () => {
       password: values.password,
       confirm_password: values.confirmPassword
     };
-    if (!fetching) {
-      setFetching(true);
+    if (!loading) {
       setMsg('Submitting');
       const request: TRequest = {
         method: 'POST',
         path: '/auth/register',
         data: formData
       };
-      fetchMe<{ message: string; access_token?: string }>(request)
-        .then((response) => {
-          setErr('');
-          setMsg(response.message);
-          let access_token = response.access_token || '';
-          localStorage.setItem('token', access_token);
-          navigate('/login');
-        })
-        .catch((err) => {
-          setMsg('');
-          setErr(prettyError(err));
-        })
-        .finally(() => clearAll());
+      const response: TLoginResponse = await fetchMe(request);
+
+      if (response?.access_token) {
+        setErr('');
+        setMsg(response?.message);
+        dispatchAuth({
+          type: AUTH_ACTION.LOGIN,
+          payload: {
+            user: response?.user,
+            userId: response?.userId.toString(),
+            scopes: PERMISSION[response?.role.toUpperCase()],
+            token: response?.access_token
+          }
+        });
+      }
     }
   };
 
