@@ -5,6 +5,6 @@ export const NeuNavButton = styled((props) => <Button {...props} />)`
   margin-top: 1rem;
   border-radius: 0px;
   border: transparent;
-  background: linear-gradient(145deg, #1d202e, #181b27);
-  box-shadow: 3px 3px 7px #0b0c11, -3px -3px 9px #2b3045;
+  box-shadow: 6px 6px 10px hsla(0, 0%, 0%, 0.4),
+    -6px -6px 10px hsla(0, 0%, 30%, 0.2);
 `;

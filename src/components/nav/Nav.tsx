@@ -15,18 +15,26 @@ import webmaneLogo from '../../img/LionHeadLOGO.svg';
 
 import Text from 'antd/lib/typography/Text';
 import styled from 'styled-components';
-import { DivWrapper } from '../../models/models';
+import { AppProps, DivWrapper } from '../../models/models';
 import { NeuNavButton } from '../button/NeuNavButton';
 import { NeuButton } from '../button/NeuButton';
 import classNames from 'classnames';
 import { AUTH_ACTION, IAuthContext } from '../auth/useAuth';
+import { Color } from '../color/Color';
 
 interface NavProps {
   isOpen: boolean | (() => void);
   toggleIsOpen: boolean | (() => void);
+  color: string;
+  setColor: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
+const Nav: FC<NavProps> = ({
+  toggleIsOpen,
+  isOpen,
+  color,
+  setColor
+}: NavProps) => {
   const navigate = useNavigate();
   const { user, dispatchAuth } = useContext<IAuthContext>(AuthContext);
   const [popUp, setPopUp] = useState<boolean>(false);
@@ -128,7 +136,7 @@ const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
             )}
           </div>
 
-          <UserBox onClick={handleAvatarClick}>
+          <UserBox>
             <UserPopUpWrapper
               className={classNames(
                 'w-[220px]',
@@ -137,6 +145,7 @@ const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
             >
               {!!user && (
                 <>
+                  <Color color={color} setColor={setColor} />
                   <UserItem onClick={logout}>
                     <div>
                       <UserOutlined />
@@ -170,9 +179,14 @@ const Nav: FC<NavProps> = ({ toggleIsOpen, isOpen }: NavProps) => {
                 </>
               )}
             </UserPopUpWrapper>
-            <UserAvatar icon={<UserOutlined />} />
-            <UserText ellipsis={true}>{user ? user : 'unknown'}</UserText>
-            <UserButton icon={<UpOutlined />}></UserButton>
+            <div
+              className="flex items-center justify-between"
+              onClick={handleAvatarClick}
+            >
+              <UserAvatar icon={<UserOutlined />} />
+              <UserText ellipsis={true}>{user ? user : 'unknown'}</UserText>
+              <UserButton icon={<UpOutlined />}></UserButton>
+            </div>
           </UserBox>
         </div>
       </NavWrapper>
@@ -210,7 +224,7 @@ const UserItem = styled.div`
   height: 3.31rem;
   cursor: pointer;
   &:hover {
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: hsla(0, 0%, 55%, 0.04);
   }
   > div {
     align-self: center;
@@ -221,17 +235,18 @@ const UserItem = styled.div`
 `;
 
 const UserBox = styled.div`
-  display: inline-flex;
+  display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   border-top: 1px solid #3d4461;
   user-select: none;
   border-radius: 0px;
   border: transparent;
-  background: linear-gradient(145deg, #1d202e, #181b27);
-  box-shadow: 3px 3px 7px #0b0c11, -3px -3px 9px #2b3045;
+  box-shadow: 6px 6px 10px hsla(0, 0%, 0%, 0.4),
+    -6px -6px 10px hsla(0, 0%, 30%, 0.2);
   cursor: pointer;
   &:hover {
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: hsla(0, 0%, 55%, 0.04);
   }
 `;
 
@@ -240,10 +255,12 @@ const UserPopUp: FC<DivWrapper> = ({ callback, children, ...rest }) => {
 };
 const UserPopUpWrapper = styled(UserPopUp)`
   position: absolute;
+  justify-content: center;
   bottom: 53px;
   color: #fff;
-  border-top: 1px solid #3d4461;
-  display: inline-flex;
+  border-top: 1px solid hsla(0, 0%, 55%, 0.1);
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   transition: opacity 0.2s ease-in;
 
@@ -251,7 +268,7 @@ const UserPopUpWrapper = styled(UserPopUp)`
     opacity: 0;
   }
   &:nth-child(odd) .user_item {
-    border-right: 1px solid rgba(255, 255, 255, 0.09);
+    border-right: 1px solid hsla(0, 0%, 55%, 0.1);
   }
 `;
 

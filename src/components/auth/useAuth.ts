@@ -1,4 +1,5 @@
 import { useCallback, useReducer, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useClient from '../../hooks/useClient';
 import { useSetNotifications } from '../../hooks/useNotifications';
 import { VERBOSITY } from '../../lib/constants';
@@ -99,6 +100,7 @@ export const useAuth = () => {
   } = authState;
   const { setNotification } = useSetNotifications();
   const { fetchMe, statusCode } = useClient(VERBOSITY.NORMAL);
+  const navigate = useNavigate();
 
   // syncs redux token state to localstorage
   useEffect(() => {
@@ -129,6 +131,7 @@ export const useAuth = () => {
         .then((response: TAuthResponse) => {
           if (statusCode === 401) {
             dispatchAuth({ type: AUTH_ACTION.LOGOUT });
+            navigate('/login');
           }
           if (response.user) {
             dispatchAuth({
@@ -159,7 +162,7 @@ export const useAuth = () => {
           });
         });
     }
-  }, [token, setNotification, fetchMe, statusCode]);
+  }, [token, setNotification, fetchMe, statusCode, navigate]);
 
   useEffect(() => {
     let mounted = true;

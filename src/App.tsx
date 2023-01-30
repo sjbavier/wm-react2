@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Nav from './components/nav/Nav';
 import LoginForm from './views/login/LoginForm';
@@ -17,15 +17,22 @@ import './App.css';
 import styled from 'styled-components';
 import { useToggle } from './hooks/useToggle';
 import classNames from 'classnames';
+import { Color } from './components/color/Color';
 
 const App: FC = () => {
   const { loading } = useContext<IAuthContext>(AuthContext);
   const [isOpen, toggleIsOpen] = useToggle(true);
+  const [color, setColor] = useState('#191b22');
 
   return (
     <div id="app_wrapper" className="h-screen overflow-hidden">
-      <LayoutWrapper>
-        <Nav toggleIsOpen={toggleIsOpen} isOpen={isOpen} />
+      <LayoutWrapper color={color}>
+        <Nav
+          toggleIsOpen={toggleIsOpen}
+          isOpen={isOpen}
+          color={color}
+          setColor={setColor}
+        />
         <div
           className={classNames(
             'transition-all duration-150 h-screen w-full pl-16',
@@ -71,7 +78,6 @@ const LayoutWrapper = styled.div`
   flex-direction: row;
   box-sizing: border-box;
   min-height: 0;
-  background: #1b1e2b;
+  background: ${(props) => props.color};
 `;
-
 export default App;

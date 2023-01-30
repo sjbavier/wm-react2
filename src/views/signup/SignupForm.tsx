@@ -12,6 +12,7 @@ import { TLoginResponse, TRequest } from '../../models/models';
 import { AUTH_ACTION, IAuthContext } from '../../components/auth/useAuth';
 import { PERMISSION } from '../../lib/Permissions';
 import { AuthContext } from '../../components/auth/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 type TValues = {
   email: string;
@@ -24,6 +25,7 @@ const SignupForm: FC = () => {
   const [err, setErr] = useState('');
   const { fetchMe, loading } = useClient();
   const { dispatchAuth } = useContext<IAuthContext>(AuthContext);
+  const navigate = useNavigate();
 
   const formSubmit = async (values: TValues) => {
     setErr('');
@@ -35,16 +37,18 @@ const SignupForm: FC = () => {
     };
     if (!loading) {
       setMsg('Submitting');
+
       const request: TRequest = {
         method: 'POST',
         path: '/auth/register',
         data: formData
       };
+
       const response: TLoginResponse = await fetchMe(request);
 
       if (response?.access_token) {
         setErr('');
-        setMsg(response?.message);
+        setMsg('Created');
         dispatchAuth({
           type: AUTH_ACTION.LOGIN,
           payload: {
@@ -54,6 +58,7 @@ const SignupForm: FC = () => {
             token: response?.access_token
           }
         });
+        navigate('/dashboard/page/1/page_size/10');
       }
     }
   };
@@ -153,8 +158,9 @@ const SignupForm: FC = () => {
 
 const LoginContainer = styled.div`
   border-radius: 4px;
-  background: #1b1e2b;
-  box-shadow: inset 6px 6px 14px #0f1118, inset -6px -6px 14px #272c3e;
+  border: 1px solid hsla(0, 0%, 55%, 0.02);
+  box-shadow: 6px 6px 10px hsla(0, 0%, 0%, 0.2),
+    -6px -6px 10px hsla(0, 0%, 40%, 0.1);
   padding: 2.5rem;
 `;
 

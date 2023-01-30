@@ -129,8 +129,9 @@ const Bookmarks: FC = () => {
 const NeuTable = styled(Table)`
   .ant-table {
     border-radius: 7px;
-    background: linear-gradient(145deg, #181b27, #1d202e);
-    box-shadow: 11px 11px 22px #171a25, -11px -11px 22px #1f2231;
+    background: transparent;
+    box-shadow: inset 0px 3px 5px hsla(0, 0%, 0%, 0.2),
+      inset 0px -5px 5px hsla(0, 0%, 0%, 0.3);
   }
 
   .ant-table-thead > tr > th {
@@ -140,8 +141,9 @@ const NeuTable = styled(Table)`
     margin-top: 2rem;
     padding: 1rem;
     border-radius: 7px;
-    background: linear-gradient(145deg, #181b27, #1d202e);
-    box-shadow: 11px 11px 22px #171a25, -11px -11px 22px #1f2231;
+    background: transparent;
+    box-shadow: inset 0px 3px 5px hsla(0, 0%, 0%, 0.2),
+      inset 0px -5px 5px hsla(0, 0%, 0%, 0.3);
   }
   .ant-table-tbody > tr.ant-table-row:hover > td {
     background: hsl(228deg 23% 31% / 38%);

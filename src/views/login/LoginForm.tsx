@@ -153,8 +153,9 @@ const LoginForm: FC = () => {
 
 const LoginContainer = styled.div`
   border-radius: 4px;
-  background: #1b1e2b;
-  box-shadow: inset 6px 6px 14px #0f1118, inset -6px -6px 14px #272c3e;
+  border: 1px solid hsla(0, 0%, 55%, 0.02);
+  box-shadow: 6px 6px 10px hsla(0, 0%, 0%, 0.2),
+    -6px -6px 10px hsla(0, 0%, 40%, 0.1);
   padding: 2.5rem;
 `;
 
