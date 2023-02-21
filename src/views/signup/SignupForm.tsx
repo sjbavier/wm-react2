@@ -58,7 +58,7 @@ const SignupForm: FC = () => {
             token: response?.access_token
           }
         });
-        navigate('/dashboard/page/1/page_size/10');
+        navigate('/bookmarks/page/1/page_size/10');
       }
     }
   };

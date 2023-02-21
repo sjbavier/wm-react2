@@ -72,7 +72,7 @@ const LoginForm: FC = () => {
     return redirect ? (
       <Navigate to={redirect} />
     ) : (
-      <Navigate to="/dashboard/page/1/page_size/10" />
+      <Navigate to="/bookmarks/page/1/page_size/10" />
     );
   } else {
     return (

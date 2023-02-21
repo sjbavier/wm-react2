@@ -45,7 +45,7 @@ const App: FC = () => {
               <Route path="/login" element={<LoginForm />} />
               <Route path="/signup" element={<SignupForm />} />
               <Route
-                path="/dashboard/page/:page/page_size/:pageSize"
+                path="/bookmarks/page/:page/page_size/:pageSize"
                 element={
                   <PrivateRoute>
                     <div className="flex flex-wrap flex-row h-full overflow-y-auto">

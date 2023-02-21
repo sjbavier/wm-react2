@@ -118,7 +118,7 @@ const Bookmarks: FC = () => {
           pageSize: pageSize ? parseInt(pageSize) : undefined,
           total: totalBookmarks,
           onChange: (page, pageSize) => {
-            navigate(`/dashboard/page/${page}/page_size/${pageSize}`);
+            navigate(`/bookmarks/page/${page}/page_size/${pageSize}`);
           }
         }}
       />

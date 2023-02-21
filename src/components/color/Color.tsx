@@ -2,10 +2,16 @@ import { HexColorPicker } from 'react-colorful';
 
 export const Color = ({
   color,
-  setColor
+  setColor,
+  className
 }: {
   color: string;
   setColor: any;
+  className: string;
 }) => {
-  return <HexColorPicker color={color} onChange={setColor} />;
+  return (
+    <div className={className}>
+      <HexColorPicker color={color} onChange={setColor} />
+    </div>
+  );
 };

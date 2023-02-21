@@ -3,19 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { Avatar, Button } from 'antd';
 import {
   UserOutlined,
-  ApartmentOutlined,
   UserAddOutlined,
   HomeOutlined,
   UpOutlined,
   DashboardOutlined,
-  BookOutlined
+  BookOutlined,
+  SettingOutlined
 } from '@ant-design/icons';
 import { AuthContext } from '../auth/AuthContext';
 import webmaneLogo from '../../img/LionHeadLOGO.svg';
 
 import Text from 'antd/lib/typography/Text';
 import styled from 'styled-components';
-import { AppProps, DivWrapper } from '../../models/models';
+import { DivWrapper } from '../../models/models';
 import { NeuNavButton } from '../button/NeuNavButton';
 import { NeuButton } from '../button/NeuButton';
 import classNames from 'classnames';
@@ -38,6 +38,7 @@ const Nav: FC<NavProps> = ({
   const navigate = useNavigate();
   const { user, dispatchAuth } = useContext<IAuthContext>(AuthContext);
   const [popUp, setPopUp] = useState<boolean>(false);
+  const [settings, setSettings] = useState<boolean>(false);
 
   const logout = (ev: React.MouseEvent<HTMLDivElement>) => {
     dispatchAuth({ type: AUTH_ACTION.LOGOUT });
@@ -45,8 +46,11 @@ const Nav: FC<NavProps> = ({
   };
 
   const handleAvatarClick = (e: React.MouseEvent<HTMLDivElement>): void => {
-    e.preventDefault();
     setPopUp(!popUp);
+  };
+
+  const handleSettingsClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+    setSettings(!settings);
   };
 
   const hamburgLine =
@@ -119,10 +123,10 @@ const Nav: FC<NavProps> = ({
                 <NeuNavButton
                   type="primary"
                   icon={<DashboardOutlined />}
-                  onClick={() => navigate('/dashboard/page/1/page_size/10')}
+                  onClick={() => navigate('/bookmarks/page/1/page_size/10')}
                   className="w-full flex items-center "
                 >
-                  dashboard
+                  bookmarks
                 </NeuNavButton>{' '}
                 <NeuNavButton
                   type="primary"
@@ -145,20 +149,22 @@ const Nav: FC<NavProps> = ({
             >
               {!!user && (
                 <>
-                  <Color color={color} setColor={setColor} />
+                  <Color
+                    className={settings ? '' : 'invisible collapsed'}
+                    color={color}
+                    setColor={setColor}
+                  />
                   <UserItem onClick={logout}>
                     <div>
                       <UserOutlined />
                     </div>
                     <div>Logout</div>
                   </UserItem>
-                  <UserItem
-                    onClick={() => navigate('/dashboard/page/1/page_size/10')}
-                  >
-                    <div>
-                      <ApartmentOutlined />
+                  <UserItem onClick={handleSettingsClick}>
+                    <div onClick={handleSettingsClick}>
+                      <SettingOutlined />
                     </div>
-                    <div>Dashboard</div>
+                    <div>Settings</div>
                   </UserItem>
                 </>
               )}
@@ -242,8 +248,12 @@ const UserBox = styled.div`
   user-select: none;
   border-radius: 0px;
   border: transparent;
-  box-shadow: 6px 6px 10px hsla(0, 0%, 0%, 0.4),
-    -6px -6px 10px hsla(0, 0%, 30%, 0.2);
+  background: linear-gradient(
+    -45deg,
+    hsla(0, 0%, 0%, 0.1) 0%,
+    hsla(0, 0%, 50%, 0.1) 100%
+  );
+  box-shadow: 6px 6px 7px hsla(0, 0%, 0%, 0.3);
   cursor: pointer;
   &:hover {
     background-color: hsla(0, 0%, 55%, 0.04);
