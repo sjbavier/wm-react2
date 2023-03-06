@@ -17,12 +17,13 @@ import './App.css';
 import styled from 'styled-components';
 import { useToggle } from './hooks/useToggle';
 import classNames from 'classnames';
-import { Color } from './components/color/Color';
 
 const App: FC = () => {
   const { loading } = useContext<IAuthContext>(AuthContext);
   const [isOpen, toggleIsOpen] = useToggle(true);
-  const [color, setColor] = useState('#191b22');
+  const [color, setColor] = useState<string>(
+    localStorage.getItem('customColor')?.toString() || '#191b22'
+  );
 
   return (
     <div id="app_wrapper" className="h-screen overflow-hidden">

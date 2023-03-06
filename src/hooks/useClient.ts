@@ -1,6 +1,7 @@
 import { useCallback, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../components/auth/AuthContext';
-import { IAuthContext } from '../components/auth/useAuth';
+import { AUTH_ACTION, IAuthContext } from '../components/auth/useAuth';
 import { TRequest } from '../models/models';
 import { useHandleNotifications } from './useNotifications';
 
@@ -19,7 +20,9 @@ export default function useClient(verbosity?: string) {
   const [loading, setLoading] = useState<boolean>(false);
   const [statusCode, setStatusCode] = useState<Number>(0);
 
-  const { token } = useContext<IAuthContext>(AuthContext);
+  const navigate = useNavigate();
+
+  const { token, dispatchAuth } = useContext<IAuthContext>(AuthContext);
   const { handleResponse } = useHandleNotifications();
 
   const fetchMe = useCallback(
@@ -42,6 +45,10 @@ export default function useClient(verbosity?: string) {
       return fetch(`${request.path}`, reqOptions).then((response) => {
         if (!response.ok) {
           //   Error Notifications
+          if (statusCode === 401) {
+            dispatchAuth({ type: AUTH_ACTION.LOGOUT });
+            navigate('/login');
+          }
           setError(true);
           setLoading(false);
           setStatusCode(response.status);
@@ -57,7 +64,7 @@ export default function useClient(verbosity?: string) {
         }
       });
     },
-    [token, verbosity, handleResponse]
+    [token, verbosity, handleResponse, dispatchAuth, navigate, statusCode]
   );
 
   return {

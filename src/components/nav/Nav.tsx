@@ -216,6 +216,7 @@ const UserButton = styled(Button)`
   color: #fff;
   border: none;
   align-self: center;
+  /* border-top: 1px solid hsla(0, 0%, 55%, 0.1); */
 `;
 
 const UserItem = styled.div`
@@ -244,7 +245,6 @@ const UserBox = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  border-top: 1px solid #3d4461;
   user-select: none;
   border-radius: 0px;
   border: transparent;
@@ -268,7 +268,7 @@ const UserPopUpWrapper = styled(UserPopUp)`
   justify-content: center;
   bottom: 53px;
   color: #fff;
-  border-top: 1px solid hsla(0, 0%, 55%, 0.1);
+
   display: flex;
   flex-wrap: wrap;
   align-items: center;

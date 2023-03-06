@@ -1,4 +1,5 @@
 import { HexColorPicker } from 'react-colorful';
+import useSaveColor from './hooks/useSaveColor';
 
 export const Color = ({
   color,
@@ -9,6 +10,7 @@ export const Color = ({
   setColor: any;
   className: string;
 }) => {
+  useSaveColor({ color });
   return (
     <div className={className}>
       <HexColorPicker color={color} onChange={setColor} />
