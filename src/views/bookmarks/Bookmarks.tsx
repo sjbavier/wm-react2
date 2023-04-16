@@ -5,8 +5,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useClient from '../../hooks/useClient';
 import { VERBOSITY } from '../../lib/constants';
 import { IBookmarks, ICategory, TRequest } from '../../models/models';
-import Search from './search/search';
 import styled from 'styled-components';
+import Search from '../../components/search/search';
+import { IDataProps } from '../../components/search/models';
 
 const Bookmarks: FC = () => {
   interface IResult {
@@ -69,7 +70,7 @@ const Bookmarks: FC = () => {
   const getBookmarks = useCallback(
     async (request: TRequest) => {
       const data: IResult = await fetchMe(request);
-      setBookmarks(data?.data ? data?.data : []);
+      setBookmarks(data.data ? data.data : []);
       setTotalBookmarks(data?.bookmarks_total);
     },
     [fetchMe]
@@ -94,17 +95,20 @@ const Bookmarks: FC = () => {
     };
   }, [getBookmarks, getParameters]);
 
+  const searchProps: IDataProps<IBookmarks> = {
+    data: bookmarks,
+    setData: setBookmarks,
+    getParameters,
+    getData: getBookmarks,
+    searchUrl: `/api/bookmarks/search/`
+  };
+
   return (
     <div className="p-8">
       <h1>bookmarks</h1>
       <Row>
         <Col span={16}>
-          <Search
-            bookmarks={bookmarks}
-            setBookmarks={setBookmarks}
-            getParameters={getParameters}
-            getBookmarks={getBookmarks}
-          />
+          <Search {...searchProps} />
         </Col>
       </Row>
 
