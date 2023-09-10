@@ -186,10 +186,10 @@ const Nav: FC<NavProps> = ({
               )}
             </UserPopUpWrapper>
             <div
-              className="flex items-center justify-between"
+              className="flex items-center justify-between w-full p-2"
               onClick={handleAvatarClick}
             >
-              <UserAvatar icon={<UserOutlined />} />
+              <UserAvatar className="" icon={<UserOutlined />} />
               <UserText ellipsis={true}>{user ? user : 'unknown'}</UserText>
               <UserButton icon={<UpOutlined />}></UserButton>
             </div>
@@ -200,15 +200,10 @@ const Nav: FC<NavProps> = ({
   );
 };
 
-const UserAvatar = styled(Avatar)`
-  margin: 10px 10px 10px 20px;
-  align-self: center;
-`;
+const UserAvatar = styled(Avatar)``;
 
 const UserText = styled(Text)`
-  vertical-align: middle;
   color: #fff;
-  align-self: center;
 `;
 
 const UserButton = styled(Button)`
@@ -216,7 +211,7 @@ const UserButton = styled(Button)`
   color: #fff;
   border: none;
   align-self: center;
-  /* border-top: 1px solid hsla(0, 0%, 55%, 0.1); */
+  /* margin-left: auto; */
 `;
 
 const UserItem = styled.div`
