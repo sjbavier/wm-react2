@@ -64,6 +64,11 @@ const LoginForm: FC = () => {
           }
         });
       }
+      setMsg('');
+      setErr('login failed');
+      setTimeout(() => {
+        setErr('');
+      }, 1500);
     }
   };
 

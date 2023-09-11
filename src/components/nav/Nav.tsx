@@ -144,13 +144,13 @@ const Nav: FC<NavProps> = ({
             <UserPopUpWrapper
               className={classNames(
                 'w-[220px]',
-                popUp ? '' : 'invisible collapsed'
+                popUp ? '' : 'invisible collapsed hidden'
               )}
             >
               {!!user && (
                 <>
                   <Color
-                    className={settings ? '' : 'invisible collapsed'}
+                    className={settings ? '' : 'invisible collapsed hidden'}
                     color={color}
                     setColor={setColor}
                   />
