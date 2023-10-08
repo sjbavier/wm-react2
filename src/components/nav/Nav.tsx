@@ -136,6 +136,14 @@ const Nav: FC<NavProps> = ({
                 >
                   reference
                 </NeuNavButton>
+                <NeuNavButton
+                  type="primary"
+                  icon={<BookOutlined />}
+                  onClick={() => navigate('/graphics')}
+                  className="w-full flex items-center "
+                >
+                  reference
+                </NeuNavButton>
               </>
             )}
           </div>

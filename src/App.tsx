@@ -17,6 +17,7 @@ import './App.css';
 import styled from 'styled-components';
 import { useToggle } from './hooks/useToggle';
 import classNames from 'classnames';
+import GraphicsContainer from './views/graphics/GraphicsContainer';
 
 const App: FC = () => {
   const { loading } = useContext<IAuthContext>(AuthContext);
@@ -60,6 +61,15 @@ const App: FC = () => {
                 element={
                   <PrivateRoute>
                     <Reference />
+                  </PrivateRoute>
+                }
+              />
+
+              <Route
+                path="/graphics"
+                element={
+                  <PrivateRoute>
+                    <GraphicsContainer />
                   </PrivateRoute>
                 }
               />

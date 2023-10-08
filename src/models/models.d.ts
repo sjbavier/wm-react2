@@ -51,14 +51,14 @@ export declare interface AppProps {
   // props2: Props & React.ComponentPropsWithRef<MyButtonWithForwardRef>; // to impersonate all the props of MyButtonForwardedRef and explicitly forwarding its ref
 }
 
-export type TRequest = {
+type TRequest = {
   method: string;
   path: string;
   data?: any;
   token?: string;
 };
 
-export type TLoginResponse = {
+type TLoginResponse = {
   userId: number;
   user: string;
   role: string;
@@ -66,32 +66,50 @@ export type TLoginResponse = {
   message: string;
 };
 
-export interface IBookmarks {
+interface IBookmarks {
   title: string;
   bookmark_id: number;
   categories_collection: ICategory[];
   link: string;
 }
 
-export interface ICategory {
+interface ICategory {
   name: string;
   category_id: number;
 }
 
-export interface DivWrapper extends React.HTMLAttributes<HTMLDivElement> {
+interface DivWrapper extends React.HTMLAttributes<HTMLDivElement> {
   callback?: Function;
 }
 
-export type TResponseReferenceStructure = {
+type TResponseReferenceStructure = {
   hash: string;
   path: string;
   reference_structure_id: number;
   structure?: string;
 };
 
-export type TStructure = {
+type TStructure = {
   children?: TStructure[];
   name: string;
   path: string;
   type: 'directory' | 'file' | 'hidden';
 };
+
+type Graphic = {
+  description: string;
+  url: string;
+};
+
+// declare module 'web' {
+//   export {
+//     TRequest,
+//     TLoginResponse,
+//     IBookmarks,
+//     ICategory,
+//     DivWrapper,
+//     TResponseReferencesStructure,
+//     TStructure,
+//     Graphic
+//   };
+// }
