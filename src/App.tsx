@@ -37,8 +37,8 @@ const App: FC = () => {
         />
         <div
           className={classNames(
-            'transition-all duration-150 h-screen w-full pl-16',
-            isOpen ? 'ml-[220px]' : 'ml-0'
+            'transition-all duration-150 h-screen w-full pl-16 justify-between bg-black/10',
+            isOpen ? 'ml-[240px]' : 'ml-0'
           )}
         >
           {!loading && (

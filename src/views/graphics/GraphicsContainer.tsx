@@ -11,7 +11,7 @@ const GraphicsContainer = () => {
   return (
     <>
       {graphics?.map((g) => (
-        <ImgViewer imgPath={g.url} description={g.description} />
+        <ImgViewer key={g.url} imgPath={g.url} description={g.description} />
       ))}
     </>
   );

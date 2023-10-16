@@ -1,7 +1,14 @@
-import { Button } from 'antd';
 import { FC, useCallback, useEffect, useState } from 'react';
 import Draggable from 'react-draggable';
 import styled from 'styled-components';
+import { NeuButton } from '../button/NeuButton';
+import {
+  RedoOutlined,
+  RotateLeftOutlined,
+  RotateRightOutlined,
+  ZoomInOutlined,
+  ZoomOutOutlined
+} from '@ant-design/icons';
 
 interface ImgViewerProps {
   imgPath: string;
@@ -77,7 +84,7 @@ const ImgViewer: FC<ImgViewerProps> = ({ imgPath, description }) => {
     handleReset();
   }, [handleReset, imgPath]);
   return (
-    <ImgViewerContainer>
+    <ImgViewerContainer className="flex content-center items-center h-full overflow-hidden">
       <Draggable key={`${transform.version}`}>
         <div style={{ cursor: 'grab' }}>
           <img
@@ -94,7 +101,7 @@ const ImgViewer: FC<ImgViewerProps> = ({ imgPath, description }) => {
         </div>
       </Draggable>
       <div
-        className="d-flex align-items-center col"
+        className="flex items-center flex-row"
         style={{
           minHeight: '40px',
           position: 'absolute',
@@ -102,43 +109,38 @@ const ImgViewer: FC<ImgViewerProps> = ({ imgPath, description }) => {
           left: '0.2rem'
         }}
       >
-        <Button
+        <NeuButton
           className="mr-1"
           disabled={transform.scale <= minScale}
-          type="link"
-          color="secondary"
-          icon={['far', 'minus']}
+          type="primary"
+          icon={<ZoomOutOutlined />}
           onClick={handleZoomOut}
-        ></Button>
-        <Button
-          className="mr-4"
+        ></NeuButton>
+        <NeuButton
+          className="mr-8"
           disabled={transform.scale >= maxScale}
-          type="link"
-          color="secondary"
-          icon={['far', 'plus']}
+          type="primary"
+          icon={<ZoomInOutlined />}
           onClick={handleZoomIn}
-        ></Button>
-        <Button
+        ></NeuButton>
+        <NeuButton
           className="mr-1"
-          type="link"
-          color="secondary"
-          icon={['far', 'undo']}
+          type="primary"
+          icon={<RotateRightOutlined />}
           onClick={handleRotateCounter}
-        ></Button>
-        <Button
-          className="mr-4"
-          type="link"
-          color="secondary"
-          icon={['far', 'redo']}
+        ></NeuButton>
+        <NeuButton
+          className="mr-8"
+          type="primary"
+          icon={<RotateLeftOutlined />}
           onClick={handleRotateClockwise}
-        ></Button>
-        <Button
-          className="mr-4"
-          type="link"
-          color="secondary"
-          icon={['far', 'sync-alt']}
+        ></NeuButton>
+        <NeuButton
+          className="mr-8"
+          type="primary"
+          icon={<RedoOutlined />}
           onClick={handleReset}
-        ></Button>
+        ></NeuButton>
       </div>
     </ImgViewerContainer>
   );
@@ -146,11 +148,11 @@ const ImgViewer: FC<ImgViewerProps> = ({ imgPath, description }) => {
 
 const ImgViewerContainer = styled.div`
   position: relative;
-  &.image-pdf-viewer > canvas {
+  /* &.image-pdf-viewer > canvas {
     height: auto !important;
     width: auto !important;
     max-height: calc(100vh - 200px);
     max-width: calc(100vw - 270px);
-  }
+  } */
 `;
 export default ImgViewer;

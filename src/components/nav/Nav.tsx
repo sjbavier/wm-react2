@@ -7,8 +7,9 @@ import {
   HomeOutlined,
   UpOutlined,
   DashboardOutlined,
-  BookOutlined,
-  SettingOutlined
+  SettingOutlined,
+  PictureOutlined,
+  CodeOutlined
 } from '@ant-design/icons';
 import { AuthContext } from '../auth/AuthContext';
 import webmaneLogo from '../../img/LionHeadLOGO.svg';
@@ -40,7 +41,7 @@ const Nav: FC<NavProps> = ({
   const [popUp, setPopUp] = useState<boolean>(false);
   const [settings, setSettings] = useState<boolean>(false);
 
-  const logout = (ev: React.MouseEvent<HTMLDivElement>) => {
+  const logout = (_ev: React.MouseEvent<HTMLDivElement>) => {
     dispatchAuth({ type: AUTH_ACTION.LOGOUT });
     navigate('');
   };
@@ -130,7 +131,7 @@ const Nav: FC<NavProps> = ({
                 </NeuNavButton>{' '}
                 <NeuNavButton
                   type="primary"
-                  icon={<BookOutlined />}
+                  icon={<CodeOutlined />}
                   onClick={() => navigate('/reference')}
                   className="w-full flex items-center "
                 >
@@ -138,11 +139,11 @@ const Nav: FC<NavProps> = ({
                 </NeuNavButton>
                 <NeuNavButton
                   type="primary"
-                  icon={<BookOutlined />}
+                  icon={<PictureOutlined />}
                   onClick={() => navigate('/graphics')}
                   className="w-full flex items-center "
                 >
-                  reference
+                  Graphics
                 </NeuNavButton>
               </>
             )}
